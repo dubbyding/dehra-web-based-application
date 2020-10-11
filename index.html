@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Dehra</title>
+		<meta charset="UTF-8">
+		<meta name="viewreport" content="width=device-width, initial-scale=1.0">	
+		<link rel="icon" href = "img/Logo.svg" type = "image/svg">
+        <!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">       
+		<link rel="stylesheet" href="style/styles.css" type="text/css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+		<script src="https://kit.fontawesome.com/8d0d3d247a.js" crossorigin="anonymous"></script>
+	</head>
+	<body>
+        <!-- For Navigation Bar -->
+        <nav class="navbar sticky-top navbar-expand-lg navbar-inverse">
+            <div class ="container-fluid inside-navigation">
+                <a class="navbar-brand" href="#"><img src="img/Logo.svg" id="logoImg"></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Rent</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Add Advertisement</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav navbar-right">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fas fa-sign-in-alt"></i> Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fas fa-user"></i> Sign Up</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- For Hero Image and searching part -->
+        <div class="container-fluid cover-image">
+			<div class="hero-text">
+				<form class="location-searching">
+					<div class="row form-group">
+						<div class="col">
+							<label for="EnterLocation"><h4>Search For place to rent:</h4></label>
+							<div class="input-group">
+								<input type="text" class="form-control" id="EnterLocation" placeholder="Enter The Location" aria-label="Enter The Location" aria-describedby="button-addon2">
+								<div class="input-group-append">
+									<button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i class="fas fa-search"></i></button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row form-group">
+						<div class="col-md-5">
+							<label for="formGroup1" class="price-range-label">Minimum Price: </label>
+							<span class="price-range"><input type="text" class="form-control price-input" id="formGroup1" placeholder="Min Price"></span>
+						</div>
+						<div class="col-md-5">
+							<label for="formGroup2" class="price-range-label">Maximum Price: </label>
+							<span class="price-range"><input type="text" class="form-control price-input" id="formGroup2" placeholder="Max Price"></span>						</div>
+					</div>
+				</form>   
+			</div>
+		</div>
+        <!-- For frontpage advertisement part -->
+		<div class = "container-fluid for-advertisement">
+            <div class="row align-items-start">
+                <div class="col">
+                    <h4 class="advertisement-topic">In Major Cities</h4>
+                </div>
+            </div>
+            <div class="row advertisment-container aligning-center">
+                <div class = "col-1 aligning-center justify-content-center">
+                    <i class="fas fa-chevron-left"></i>
+                </div>
+                <div class = "col-2 advertisement-image" id="1-ad-img">
+                    <p class="details" id="1-ad-details">
+                    </p>
+                </div>
+                <div class="col-1"></div>
+                <div class = "col-2 advertisement-image" id="2-ad-img">
+                    <p class="details" id="2-ad-details">
+                    </p>
+                </div>
+                <div class="col-1"></div>
+                <div class = "col-2 advertisement-image" id="3-ad-img">
+                    <p class="details justify-content-left" id="3-ad-details">
+                    </p>
+                </div>
+                <div class="col-1"></div>
+                <div class = "col-2 advertisement-image" id="4-ad-img">
+                    <p class="details justify-content-left" id="4-ad-details">
+                    </p>
+                </div>
+                <div class = "col aligning-center justify-content-center">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+        </div>
+        <div class = "container-fluid for-advertisement">
+            <div class="row align-items-end">
+                <div class="col">
+                    <h4 class="advertisement-topic">Newly added</h4>
+                </div>
+            </div>
+            <div class="row advertisment-container aligning-center">
+                <div class = "col aligning-center justify-content-center">
+                    <i class="fas fa-chevron-left"></i>
+                </div>
+                <div class = "col-2 advertisement-image" id="5-ad-img">
+                    <p class="details justify-content-left" id="5-ad-details">
+                    </p>
+                </div>
+                <div class="col-1"></div>
+                <div class = "col-2 advertisement-image" id="6-ad-img">
+                    <p class="details justify-content-left" id="6-ad-details">
+                    </p>
+                </div>
+                <div class="col-1"></div>
+                <div class = "col-2 advertisement-image" id="7-ad-img">
+                    <p class="details justify-content-left" id="7-ad-details">
+                    </p>
+                </div>
+                <div class="col-1"></div>
+                <div class = "col-2 advertisement-image" id="8-ad-img">
+                    <p class="details justify-content-left" id="8-ad-img">
+                    </p>
+                </div>
+                <div class = "col aligning-center justify-content-center">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+		</div>
+		<!-- Details -->
+		<div class="container-fluid simple-details">
+            <div class="row item-three">
+                <div class="col align-items-start justify-content-center">
+                    <i class="fas feature-icons fa-user-friends"></i>
+                </div>
+                <div class="col">
+                    <i class="fas feature-icons fa-home"></i>
+                </div>
+                <div class="col">
+                    <i class="fas feature-icons fa-ad"></i>
+                </div>
+            </div>
+            <div class="row item-three">
+                <div class="col align-items-center">
+                    Connect With Homeowner and communicate with them through the in built chat feature
+                </div>
+                <div class="col">
+                    Check all of the available rooms for rent and choose your prefered one
+                </div>
+                <div class="col">
+                    Put your room for rent.
+                </div>
+            </div>
+            <div class="row item-three">
+                <div class="col align-items-end">
+                    <button type="button" class="btn btn-primary">Sign Up</button>
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-primary">Search For Rooms</button>
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-primary">Advertisement</button>
+                </div>
+            </div>
+		</div>
+		<!-- For footer Part -->
+		<footer class="page-footer">
+
+			<div class="container-fluid text-center text-md-left pt-4">
+		
+			<!-- Grid row -->
+				<div class="row">
+			
+					<!-- Grid column -->
+					<div class="col-md-5 mt-md-0 mt-3">
+			
+						<!-- Content -->
+						<h5 class="text-uppercase">About Us</h5>
+						<p>
+							This project was initaited to solve the main 
+							problem of renting rooms inside cities such as Kathmandu.
+						</p>
+			
+					</div>
+					<!-- Grid column -->
+			
+					<hr class="clearfix w-100 d-md-none pb-3">
+			
+					<!-- Grid column -->
+					<div class="col-md-4 mb-md-0 mb-3">
+			
+					<!-- Links -->
+						<h5 class="text-uppercase">Features</h5>
+				
+						<ul class="list-unstyled">
+							<li>
+							<a href="#!">Rent Rooms</a>
+							</li>
+							<li>
+							<a href="#!">Add Advertisement</a>
+							</li>
+						</ul>
+			
+					</div>
+					<!-- Grid column -->
+			
+					<!-- Grid column -->
+					<div class="col-md-3 mb-md-0 mb-3">
+						<h5 class="text-uppercase">Contact Us</h5>
+						<div class="form-group">
+							<input type="email" class="form-control form-control-sm" id="reviewEmail" placeholder="Email Address">
+						</div>
+						<div class="form-group">
+							<textarea class="form-control form-control-sm" id="review" placeholder="Queries" rows="3"></textarea>
+						</div>
+						<button type="submit" class="btn btn-primary" id="query">Submit</button>
+					</div>
+					<!-- Grid column -->
+			
+				</div>
+				<!-- Grid row -->
+		
+			</div>
+			<!-- Footer Links -->
+		
+			<!-- Copyright -->
+			<div class="footer-copyright text-center py-3">© 2020 Copyright:
+			<a href="#">hamroDehra.com</a>
+			</div>
+			<!-- Copyright -->
+		
+		</footer>
+		
+	</body>
+	<script>
+        for(var i=1;i<=8;i++){
+        value = String(i)+'-ad-img';
+        document.getElementById(value).addEventListener("click", function() {
+            console.log("HI");
+        }
+        );
+        }
+	</script>
+</html>
