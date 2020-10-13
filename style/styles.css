@@ -15,6 +15,7 @@ nav{
     height:10vh;
 }
 .navbar, .inside-navigation, #logoImg, .nav-link, .navbar-collapse{
+    height:100%;
 	background-color: #122029;
 }
 .nav-link{
@@ -24,11 +25,6 @@ nav{
 .fas{
 	color: white;
 	background-color: inherit;
-}
-/* For Footer*/
-.page-footer{
-	background-color: rgba(196, 196, 196, 0.1);
-    height: 45vh;
 }
 /* for Frontpage Image */
 .cover-image {
@@ -90,10 +86,11 @@ nav{
 	background-size: contain;
 	background-position: center;
 	background-repeat: no-repeat;
-    align-items: center;
+	align-items: center;
     height: 70%;
     max-width: 11vw;
     transition:0.3s;
+    margin: 0 3%;
     padding:0;
     border-radius:23px;
 }
@@ -126,20 +123,20 @@ nav{
     height: 33.33%;
 }
 .feature-icons{
-    font-size: 5em;
+    font-size: 3rem;
 }
 @include media-breakpoint-up(sm) {
     .simple-details {
         padding-top:2%;
     }
   .feature-icons {
-    font-size: 1.2rem;
+    font-size: 1rem;
   }
 }
 
 @include media-breakpoint-up(md) {
   .feature-icons {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
   }
     .simple-details {
         padding-top:3%;
@@ -148,10 +145,29 @@ nav{
 
 @include media-breakpoint-up(lg) {
   .feature-icons {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
   }
   
     .simple-details {
         padding-top:5%;
     }
+} 
+/* For Footer*/
+.page-footer{
+	background-color: rgba(196, 196, 196, 0.1);
+    height: 45vh;
+}
+/* Renting Page */
+.renting-page-container{
+    height:90vh;
+}
+.renting-page{
+    height: 100%;
+}
+.search-details{
+    background-color: #20586B;
+    padding-top: 10px;
+}
+.search-details-heading{
+    text-decoration: underline;
 }
