@@ -12,7 +12,7 @@
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-		<script src="https://kit.fontawesome.com/8d0d3d247a.js" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/8d0d3d247a.js" crossorigin="anonymous"></script>
     </head>
     <body>
         <!-- For Navigation Bar -->
@@ -76,9 +76,156 @@
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
                 <!-- Renting Showing Column-->
-                <div class="col-md-10">
-
+                <div class="col-md-10 advertisement-showing-col">
+                    <div class="row pt-3 page-choose top-page-choose">
+                        <div class="col-1 next-button">
+                            <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-chevron-left"></i></button>
+                        </div>
+                        <div class="col-10 d-flex justify-content-center">
+                            <div class="button-pages">
+                                <button type="button" class="btn btn-primary btn-sm" id="page-first">1</button>
+                            </div>
+                            <div class="button-pages">
+                                <button type="button" class="btn btn-primary btn-sm" id="page-second">2</button>
+                            </div>
+                            <div class="button-pages">
+                                ...
+                            </div>
+                            <div class="button-pages">
+                                <button type="button" class="btn btn-primary btn-sm" id="page-last">N</button>
+                            </div>
+                        </div>
+                        <div class="col-1 prev-button">
+                            <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                        
+                    </div>
+                    <div class="row content-inside">
+                        <div class="col-12">
+                            <div class="row content-inside-row">
+                                <div class="col-3 d-flex justify-content-center align-items-center">
+                                    <div class = "col-2 advertisement-image rent-ads-img" id="1-ad-img" data-toggle="modal" data-target="#myModal">
+                                        <p class="details justify-content-left" id="1-ad-details">
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-3 d-flex justify-content-center align-items-center">
+                                    <div class = "col-2 advertisement-image rent-ads-img" id="2-ad-img" data-toggle="modal" data-target="#myModal">
+                                        <p class="details justify-content-left" id="1-ad-details">
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-3 d-flex justify-content-center align-items-center">
+                                    <div class = "col-2 advertisement-image rent-ads-img" id="3-ad-img" data-toggle="modal" data-target="#myModal">
+                                        <p class="details justify-content-left" id="1-ad-details">
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-3 d-flex justify-content-center align-items-center">
+                                    <div class = "col-2 advertisement-image rent-ads-img" id="4-ad-img" data-toggle="modal" data-target="#myModal">
+                                        <p class="details justify-content-left" id="1-ad-details">
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row content-inside-row">
+                                <div class="col-3 d-flex justify-content-center align-items-center">
+                                    <div class = "col-2 advertisement-image rent-ads-img" id="5-ad-img" data-toggle="modal" data-target="#myModal">
+                                        <p class="details justify-content-left" id="1-ad-details">
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-3 d-flex justify-content-center align-items-center">
+                                    <div class = "col-2 advertisement-image rent-ads-img" id="6-ad-img" data-toggle="modal" data-target="#myModal">
+                                        <p class="details justify-content-left" id="1-ad-details">
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-3 d-flex justify-content-center align-items-center">
+                                    <div class = "col-2 advertisement-image rent-ads-img" id="7-ad-img" data-toggle="modal" data-target="#myModal">
+                                        <p class="details justify-content-left" id="1-ad-details">
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-3 d-flex justify-content-center align-items-center">
+                                    <div class = "col-2 advertisement-image rent-ads-img" id="8-ad-img" data-toggle="modal" data-target="#myModal">
+                                        <p class="details justify-content-left" id="1-ad-details">
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row content-inside-row">
+                                <div class="col-3 d-flex justify-content-center align-items-center">
+                                    <div class = "col-2 advertisement-image rent-ads-img" id="9-ad-img" data-toggle="modal" data-target="#myModal">
+                                        <p class="details justify-content-left" id="1-ad-details">
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-3 d-flex justify-content-center align-items-center">
+                                    <div class = "col-2 advertisement-image rent-ads-img" id="10-ad-img" data-toggle="modal" data-target="#myModal">
+                                        <p class="details justify-content-left" id="1-ad-details">
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-3 d-flex justify-content-center align-items-center">
+                                    <div class = "col-2 advertisement-image rent-ads-img" id="11-ad-img" data-toggle="modal" data-target="#myModal">
+                                        <p class="details justify-content-left" id="1-ad-details">
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="col-3 d-flex justify-content-center align-items-center">
+                                    <div class = "col-2 advertisement-image rent-ads-img" id="12-ad-img" data-toggle="modal" data-target="#myModal">
+                                        <p class="details justify-content-left" id="1-ad-details">
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row pt-3 page-choose bottom-page-choose">
+                        <div class="col-1 next-button">
+                            <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-chevron-left"></i></button>
+                        </div>
+                        <div class="col-10 d-flex justify-content-center">
+                            <div class="button-pages">
+                                <button type="button" class="btn btn-primary btn-sm" id="page-first">1</button>
+                            </div>
+                            <div class="button-pages">
+                                <button type="button" class="btn btn-primary btn-sm" id="page-second">2</button>
+                            </div>
+                            <div class="button-pages">
+                                ...
+                            </div>
+                            <div class="button-pages">
+                                <button type="button" class="btn btn-primary btn-sm" id="page-last">N</button>
+                            </div>
+                        </div>
+                        <div class="col-1 prev-button">
+                            <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </div>
+         <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+            
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    
+                    <h4 class="modal-title" style="color: black">Modal Header</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                <p id="someRandomText"></p>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+            
             </div>
         </div>
         <!-- For footer Part -->
@@ -147,4 +294,7 @@
 			</div>
 			<!-- Copyright -->
 		
-		</footer>
+        </footer>
+    </body>
+    <script src="scripts/modalData.js" type="text/javascript"></script>
+</html>

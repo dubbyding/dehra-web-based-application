@@ -164,10 +164,42 @@ nav{
 .renting-page{
     height: 100%;
 }
+/* For left side Search Details */
 .search-details{
     background-color: #20586B;
     padding-top: 10px;
 }
 .search-details-heading{
     text-decoration: underline;
+}
+/* For central content display ie. rented rooms */
+.advertisement-showing-col{
+    background-color:rgba(19, 34, 42, 0.81)
+}
+.page-choose{
+    padding-left: 2%;
+    height:10%;
+    padding-bottom: 2%;
+}
+.top-page-choose{
+    border-bottom: 1px solid white;
+}
+.bottom-page-choose{
+    border-top: 1px solid white;
+}
+.horizontal-line{
+    border-top: 1px solid white;
+    height:1px;
+}
+.button-pages{
+    padding-left: 1.25%;
+}
+.content-inside{
+    height:80%;
+}
+.content-inside-row{
+    height:33.33%;
+}
+.rent-ads-img{
+    min-width:50%;
 }
