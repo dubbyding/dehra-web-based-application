@@ -203,3 +203,13 @@ nav{
 .rent-ads-img{
     min-width:50%;
 }
+/* modal content*/
+.modal{
+    color:black;
+}
+.details-property{
+    word-wrap: break-word;
+}
+.detail-heading{
+    font-weight: bold;
+}
