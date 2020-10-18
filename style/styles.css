@@ -12,7 +12,10 @@
 /* For Navigation Bar*/
 nav{
 	margin:0;
+}
+.navbar{
     height:10vh;
+    width:100%;
 }
 .navbar, .inside-navigation, #logoImg, .nav-link, .navbar-collapse{
 	background-color: #122029;
@@ -224,13 +227,24 @@ nav{
 }
 .chatting-detail-area{
     background-color: #1E1E1E;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 .chatting-header{
     background-color: #1E1E1E;
     padding: 20px 0;
     border-bottom: 1px solid white;
 }
+@media only screen and (min-height: 768px){
+    .chatting-header{
+        height: 20%;
+    }
+}
+@media only screen and (min-height: 1080px){
+    .chatting-header{
+        height: 15%;
+    }
+}
+
 .header-content-chat-seperate{
     background-color:white;
 }
@@ -253,4 +267,29 @@ nav{
 .user-face{
     margin-top: 5px;
     font-size: 30px;
+}
+/* Chatting area*/
+.chatting-message-section{
+    height:90vh;
+}
+.chatting-to-user{
+    background-color: #1E1E1E;
+    height: 10%;
+    padding-left: 20px;
+    box-shadow: 0px 1px #666679;
+}
+#username-chatting{
+    padding-left: 20px;
+}
+.chat-area{
+    height: 80%;
+    overflow-y: scroll;
+}
+.texting-area{
+    height: 10%;
+}
+.message-box{
+    align-items: baseline;
+    height:50%;
+    bottom:0;
 }
