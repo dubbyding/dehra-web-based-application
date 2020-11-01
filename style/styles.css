@@ -293,3 +293,72 @@ nav{
     height:50%;
     bottom:0;
 }
+.texting-details-send{
+    background-color: #C4C4C4;
+    color: black;
+    padding-top: 20px;
+}
+.chatDetailsSendButton{
+    margin-top: 20px;
+    justify-content: center;
+}
+/* For Profile */
+.profile-navigation-options{
+    background-color: #535353;
+    padding:20px 10px;
+    border-radius: 10px;
+}
+.for-profile-details{
+    padding: 20px;
+    width:inherit;
+}
+.for-profile-details:hover{
+    background-color: black;
+    cursor: pointer;
+}
+#profile-Details{
+    text-decoration: underline;
+}
+.all-profile-content{
+    border: 1px solid white;
+    padding:20px;
+    margin-left: 50px;
+    border-radius: 20px;
+}
+.my-account-features{
+    padding:10px 0;
+}
+#change-password{
+    padding-top:15px;
+    padding-bottom: 15px;
+}
+#change-password:hover{
+    cursor: pointer;
+}
+.profile-image{
+    background-image: url("#");
+    background-color:white;
+	background-size: cover;
+	background-position: top;
+	background-repeat: no-repeat;
+    align-items: center;
+    margin-left: 10px;
+    height: 100px;
+    border-radius: 20px;;
+}
+.show-profile-header{
+    height:10%;
+}
+.search-people{
+    padding-bottom: 10px;
+}
+.people-show-container{
+    height:80%;
+}
+.contacted-people-show{
+    padding-bottom: 13px;
+    padding-top: 13px;
+}
+.choose-next-page{
+    height:10%;
+}
