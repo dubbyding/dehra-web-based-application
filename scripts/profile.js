@@ -1,10 +1,15 @@
+var contacted_people = {"id":[1, 2, 3, 4, 5, 6], "name":["Ram", "Shyam", "Hari", "Gita", "Sita", "Rita"], room_id:[1, 2, 3, 4, 5, 6]};
+
 var profileElements = document.getElementsByClassName("for-profile-details");
+
 /*
 // For initializing profile details
 $(document).ready(function(){
     document.getElementById("account-details").click();
 });
+
 */
+
 $(".for-profile-details").on('click', function(){
     id = String($(this).attr('id'));
     var displayArea = document.getElementById("add-content-profile");
@@ -71,7 +76,90 @@ $(".for-profile-details").on('click', function(){
         </div>
     </div>
     `
-    };
+    } else if (id =="contacted-people"){
+        displayArea.classList.add("col-md-8", "container", "all-profile-content", "h-75");
+        displayArea.innerHTML=`<div class="row pb-3 border-bottom show-profile-header align-items-start">
+                    <div class="col">
+                        <h4>Contacted People</h4>
+                    </div>
+                    <div class="col">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="EnterPeople" placeholder="Enter People's Name" aria-label="Enter People's Name" aria-describedby="button-addon">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="submit" id="button-addon"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row people-show-container">
+                    <div class="col container-fluid" id = "contacted-people-add">
+                        
+                    </div>
+                </div>
+                <div class="row choose-next-page border-top pt-2">
+                    <div class="col-1 next-button">
+                        <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-chevron-left"></i></button>
+                    </div>
+                    <div class="col-10 d-flex justify-content-center" id="buttons-below">
+                        
+                    </div>
+                    <div class="col-1 prev-button">
+                        <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>`;
+        var counter = 0;
+        var display_contacted_people_variable = "";
+        initial_button = 0;
+        total_page = contacted_people["id"].length/10;
+        button_display="";
+        if(total_page>5){
+            if(initial_button==total_page-1){
+                button_number = 0;
+            }else{
+                button_number=initial_button;
+            }
+            for(i=button_display;i<initial_button+2;i++){
+                button_display += `<div class="button-pages">
+                    <button type="button" class="btn btn-primary btn-sm" id="page-`+String(i+1)+`">`+String(i+1)`</button>
+                </div>`;
+            }
+            button_display += `<div class="button-pages">...</div>
+            <div class="button-pages">
+                <button type="button" class="btn btn-primary btn-sm" id="page-`+String(total_page)+`">`+String(total_page)+`</button>
+            </div>`
+        }else{
+            for(i=initial_button;i<total_page;i++){
+                button_display += `<div class="button-pages">
+                    <button type="button" class="btn btn-primary btn-sm" id="page-`+String(i+1)+`">`+String(i+1)+`</button>
+                </div>`;
+            }
+        }
+        document.getElementById("buttons-below").innerHTML=button_display;
+        if((contacted_people["id"].length - counter)>10){
+            length_of_contacted_people = 10;
+        }else{
+            length_of_contacted_people = (contacted_people["id"].length - counter)/2;
+        }
+
+        for(i=0; i < length_of_contacted_people;i++){
+            display_contacted_people_variable = display_contacted_people_variable + `<div class="row contacted-people-show">`;
+            for(j=0; j<2; j++){
+                display_contacted_people_variable += `<div class="col d-flex display-contacted-people-onclick align-items-center" id="displayingContactedPeople`+ contacted_people.room_id[counter] +`">
+                        <i class="fas fa-user user-face"></i>
+                        <span id="username-chatting">`+contacted_people.name[counter]+`</span>
+                    </div>`;
+                
+                counter++;
+            }
+            display_contacted_people_variable += "</div>";
+        }
+        document.getElementById("contacted-people-add").innerHTML = display_contacted_people_variable;
+        $(".display-contacted-people-onclick").on("click", function(){
+            id=String($(this).attr('id'));
+            room_id = id.replace("displayingContactedPeople", "");
+            alert(room_id);
+        });
+    }
     $("#profile-pic-upload").change(function(){
         file = document.getElementById("profile-pic-upload");
         var fr=new FileReader();

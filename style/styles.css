@@ -362,3 +362,6 @@ nav{
 .choose-next-page{
     height:10%;
 }
+.display-contacted-people-onclick{
+    cursor: pointer;
+}
