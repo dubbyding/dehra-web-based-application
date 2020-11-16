@@ -110,55 +110,58 @@ $(".for-profile-details").on('click', function(){
         var counter = 0;
         var display_contacted_people_variable = "";
         initial_button = 0;
-        total_page = contacted_people["id"].length/10;
-        button_display="";
-        if(total_page>5){
-            if(initial_button==total_page-1){
-                button_number = 0;
-            }else{
-                button_number=initial_button;
-            }
-            for(i=button_display;i<initial_button+2;i++){
-                button_display += `<div class="button-pages">
-                    <button type="button" class="btn btn-primary btn-sm" id="page-`+String(i+1)+`">`+String(i+1)`</button>
-                </div>`;
-            }
-            button_display += `<div class="button-pages">...</div>
-            <div class="button-pages">
-                <button type="button" class="btn btn-primary btn-sm" id="page-`+String(total_page)+`">`+String(total_page)+`</button>
-            </div>`
-        }else{
-            for(i=initial_button;i<total_page;i++){
-                button_display += `<div class="button-pages">
-                    <button type="button" class="btn btn-primary btn-sm" id="page-`+String(i+1)+`">`+String(i+1)+`</button>
-                </div>`;
-            }
-        }
-        document.getElementById("buttons-below").innerHTML=button_display;
-        if((contacted_people["id"].length - counter)>10){
-            length_of_contacted_people = 10;
-        }else{
-            length_of_contacted_people = (contacted_people["id"].length - counter)/2;
-        }
-
-        for(i=0; i < length_of_contacted_people;i++){
-            display_contacted_people_variable = display_contacted_people_variable + `<div class="row contacted-people-show">`;
-            for(j=0; j<2; j++){
-                display_contacted_people_variable += `<div class="col d-flex display-contacted-people-onclick align-items-center" id="displayingContactedPeople`+ contacted_people.room_id[counter] +`">
-                        <i class="fas fa-user user-face"></i>
-                        <span id="username-chatting">`+contacted_people.name[counter]+`</span>
+            total_page = contacted_people["id"].length/10;
+            button_display="";
+            if(total_page>5){
+                if(initial_button==total_page-1){
+                    button_number = 0;
+                }else{
+                    button_number=initial_button;
+                }
+                for(i=button_display;i<initial_button+2;i++){
+                    button_display += `<div class="button-pages">
+                        <button type="button" class="btn btn-primary btn-sm" id="page-`+String(i+1)+`">`+String(i+1)`</button>
                     </div>`;
-                
-                counter++;
+                }
+                button_display += `<div class="button-pages">...</div>
+                <div class="button-pages">
+                    <button type="button" class="btn btn-primary btn-sm" id="page-`+String(total_page)+`">`+String(total_page)+`</button>
+                </div>`
+            }else{
+                for(i=initial_button;i<total_page;i++){
+                    button_display += `<div class="button-pages">
+                        <button type="button" class="btn btn-primary btn-sm" id="page-`+String(i+1)+`">`+String(i+1)+`</button>
+                    </div>`;
+                }
             }
-            display_contacted_people_variable += "</div>";
-        }
-        document.getElementById("contacted-people-add").innerHTML = display_contacted_people_variable;
-        $(".display-contacted-people-onclick").on("click", function(){
-            id=String($(this).attr('id'));
-            room_id = id.replace("displayingContactedPeople", "");
-            alert(room_id);
-        });
+            document.getElementById("buttons-below").innerHTML=button_display;
+            if((contacted_people["id"].length - counter)>10){
+                length_of_contacted_people = 10;
+            }else{
+                length_of_contacted_people = (contacted_people["id"].length - counter)/2;
+            }
+    
+            for(i=0; i < length_of_contacted_people;i++){
+                display_contacted_people_variable = display_contacted_people_variable + `<div class="row contacted-people-show">`;
+                for(j=0; j<2; j++){
+                    display_contacted_people_variable += `<div class="col d-flex display-contacted-people-onclick align-items-center" id="displayingContactedPeople`+ contacted_people.room_id[counter] +`">
+                            <i class="fas fa-user user-face"></i>
+                            <span id="username-chatting">`+contacted_people.name[counter]+`</span>
+                        </div>`;
+                    
+                    counter++;
+                }
+                display_contacted_people_variable += "</div>";
+            }
+            document.getElementById("contacted-people-add").innerHTML = display_contacted_people_variable;
+            $(".display-contacted-people-onclick").on("click", function(){
+                id=String($(this).attr('id'));
+                room_id = id.replace("displayingContactedPeople", "");
+                alert(room_id);
+            });
+        
+    }else if(id =="add-advertisement"){
+        
     }
     $("#profile-pic-upload").change(function(){
         file = document.getElementById("profile-pic-upload");

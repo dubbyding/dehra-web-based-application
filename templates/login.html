@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+		<div class="container-fluid login-signup-background" >
+			<div class="row align-items-center h-100">
+				<div class="col-md-4 ml-5 p-4 rounded details-inserting-login-signup-area">
+					<div class="login-signup-header border-bottom">
+						<h3>Login</h3>
+					</div>
+					<div class="login-signup-body pt-3">
+						<form method="POST">
+							<div class="input-group form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="fas fa-user"></i></span>
+								</div>
+								<input type="text" class="form-control" required name="Username" placeholder="Username" id="Username" autofocus>
+							</div>
+							<div class="input-group form-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text"><i class="fas fa-lock"></i></span>
+								</div>
+								<input type="password" id="enterPassword" required name="Password" placeholder="Password" class="form-control" aria-describedby="passwordHelpBlock password-show">
+								<div class="input-group-append">
+									<button class="btn btn-outline-secondary enterPassword" type="button" id="password-show" onclick="showPassword(this)"><i class="far fa-eye"></i></button>
+								</div>
+								<small id="passwordHelpBlock" class="form-text text-muted">
+									Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji.
+								</small>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+								<label class="form-check-label" for="defaultCheck1">
+									Remember Me
+								</label>
+							</div>
+							<div class="form-group">
+								<input type="submit" value="Login" class="btn btn-success" id="login-request">
+								<a href="{{ url_for('signup') }}"><input type="Button" value="SignUp" class="btn float-right btn-primary" id="signup-button"></a>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+{% endblock %}

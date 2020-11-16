@@ -4,10 +4,10 @@
 		<title>Dehra</title>
 		<meta charset="UTF-8">
 		<meta name="viewreport" content="width=device-width, initial-scale=1.0">	
-		<link rel="icon" href = "img/Logo.svg" type = "image/svg">
+		<link rel="icon" href = "{{ url_for('static', filename='style/img/Logo.svg') }}" type = "image/svg">
         <!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">       
-		<link rel="stylesheet" href="style/styles.css" type="text/css">
+		<link rel="stylesheet" href="{{ url_for('static', filename='style/styles.css') }}" type="text/css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -18,7 +18,7 @@
         <!-- For Navigation Bar -->
         <nav class="navbar sticky-top navbar-expand-lg navbar-inverse">
             <div class ="container-fluid inside-navigation">
-                <a class="navbar-brand" href="#"><img src="img/Logo.svg" id="logoImg"></a>
+                <a class="navbar-brand" href="{{url_for('index')}}"><img src="{{ url_for('static', filename='style/img/Logo.svg') }}" id="logoImg"></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -36,7 +36,7 @@
                     </ul>
                     <ul class="navbar-nav navbar-right">
                         <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-sign-in-alt"></i> Login</a>
+                            <a class="nav-link" href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt"></i> Login</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#"><i class="fas fa-user"></i> Sign Up</a>
@@ -45,6 +45,7 @@
                 </div>
             </div>
         </nav>
+        {% block content %}{% endblock %}
         <!-- For footer Part -->
 		<footer class="page-footer">
 
@@ -112,5 +113,7 @@
 			<!-- Copyright -->
 		
         </footer>
-    </body>
+	</body>
+    <script src="{{ url_for('static', filename='./scripts/password.js') }}"></script>
+    <script src="{{ url_for('static', filename='./scripts/modalData.js') }}" type="text/javascript"></script>
 </html>
