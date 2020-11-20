@@ -10,3 +10,4 @@ function showPassword(element){
         $("i",element).addClass("fa-eye").removeClass("fa-eye-slash");
     }
 }
+console.log(error)

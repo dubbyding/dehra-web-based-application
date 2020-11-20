@@ -83,17 +83,15 @@ nav{
     align-items: center;
 }
 .advertisement-image{
-    background-color:white;
-    background-image: url("#");
+    background-image: url("./img/no-image-icon-6.png");
 	background-size: contain;
 	background-position: center;
 	background-repeat: no-repeat;
 	align-items: center;
     height: 70%;
-    max-width: 11vw;
-    transition:0.3s;
+    max-width: 20px;
     margin: 0 3%;
-    padding:0;
+    padding: 0;
     border-radius:23px;
 }
 .details{
