@@ -3,14 +3,18 @@ details = {'Location': 'Kathmandu', 'Price': "Rs. 2000 per month","Room Count": 
          "Owner":"Raj Maharjan"}
 
 
+
 var checkElement = document.getElementsByClassName("messages");
-$(".messages").on('click', function () {
-    id=String($(this).attr('id'));
-    for(i=0; i<checkElement.length;i++){
-        document.getElementById(checkElement[i].id).style.backgroundColor="#1E1E1E";
-        document.getElementById(id).style.backgroundColor="black";
-        detailsShowingOwnerRenter(id);
-    };
+$(document).ready(function(){
+    $(".messages").on('click', function () {
+        id=String($(this).attr('id'));
+        console.log(id);
+        for(i=0; i<checkElement.length;i++){
+            document.getElementById(checkElement[i].id).style.backgroundColor="#1E1E1E";
+            document.getElementById(id).style.backgroundColor="black";
+            detailsShowingOwnerRenter(id);
+        };
+    });
 });
 
 function detailsShowingOwnerRenter(i){

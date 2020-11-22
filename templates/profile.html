@@ -1,50 +1,5 @@
-<!doctype html>
-<html lang="en">
-	<head>
-		<title>Dehra</title>
-		<meta charset="UTF-8">
-		<meta name="viewreport" content="width=device-width, initial-scale=1.0">	
-		<link rel="icon" href = "img/Logo.svg" type = "image/svg">
-        <!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">       
-		<link rel="stylesheet" href="style/styles.css" type="text/css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-        <script src="https://kit.fontawesome.com/8d0d3d247a.js" crossorigin="anonymous"></script>
-    </head>
-    <body>
-        <!-- For Navigation Bar -->
-        <nav class="navbar sticky-top navbar-expand-lg navbar-inverse">
-            <div class ="container-fluid inside-navigation">
-                <a class="navbar-brand" href="#"><img src="img/Logo.svg" id="logoImg"></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Rent</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Add Advertisement</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav navbar-right">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-sign-in-alt"></i> Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="fas fa-user"></i> Sign Up</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+{% extends 'base.html' %}
+{% block content %}
         <!-- For Main Body part of profile-->
         <div class="container-fluid page-container">
             <div class="row h-100 align-items-center">
@@ -66,32 +21,173 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-8 container all-profile-content h-75" id = "add-content-profile">
-                    <div class="row pb-3 border-bottom show-profile-header align-items-start">
+                <div class="col-md-8 container all-profile-content h-75" id = "accountdetails">
+                    <form method="POST">
+                    <div class="row">
+                        <div class="col"><h4>Account Details</h4></div>
+                    </div>
+                    <div class="row">
                         <div class="col">
-                            <h4>Advertisement</h4>
+                            <div class="row my-account-features justify-items-center">
+                                <div class="col-md-3 profile-image" id="profile-image">
+                                </div>
+                            </div>
+                            <div class="row my-account-features">
+                                <div class="col input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="profile-pic-upload">
+                                        <label class="custom-file-label" for="profile-pic-upload">Choose file</label>
+                                    </div>
+                                </div>
+                                    
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row my-account-features">
+                                <div class="col">Username: <input class="form-control" name="Username" value="{{ session['username'] }}" type="text" placeholder="Username" id="username"></div>
+                            </div>
+                            <div class="row my-account-features">
+                                <div class="col">Email: <input class="form-control" name="Email" value="{{ email }}" type="email" placeholder="Email Id" id="email"></div>
+                            </div>
+                            <div class="row my-account-features">
+                                <div class="col">
+                                    <label for="Enter Password">Enter Password</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control enterPassword" name="password" id="enterPassword" placeholder="Enter Password" aria-label="Enter Password" aria-describedby="password-show">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary enterPassword" type="button" id="password-show" onclick="showPassword(this)"><i class="far fa-eye"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row my-account-features">
+                                <div class="col" id="change-password"><button class="btn btn-secondary" type="button">Change Password</button></div>
+                                <div class="col d-none" id="display-reenterPassword">
+                                    <label for="Re-Enter Password">Re-Enter Password</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control ReEnterPassword" name="ReEnterPassword" id="ReEnterPassword" placeholder="Re-Enter Password" aria-label="Re-Enter Password" aria-describedby="password-show">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary ReEnterPassword" type="button" id="Repassword-show" onclick="showPassword(this)"><i class="far fa-eye"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <div class="row justify-content-between">
+                        <div class="col-md-3">
+                            <button type="button" class="btn btn-danger">Delete Account</button>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary">Confirm</button>
+                        </div>
+                    </div>
+                    
+                    </form>
+                </div>
+                <div class="col-md-8 container all-profile-content h-75" id = "contactedpeople">
+                    <div class="row border-bottom w-100 show-profile-header">
+                        <div class="col"><h4>Contacted People</h4></div>
+                    </div>
                     <div class="row people-show-container">
-                        <div class="col container-fluid" id = "Advertisement-add">
+                        <div class="col" id = 'adding-contacted-people'>
                             
                         </div>
                     </div>
                     <div class="row choose-next-page border-top pt-2">
                         <div class="col-1 next-button">
-                            <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-chevron-left"></i></button>
+                            <button type="button" class="btn btn-primary btn-sm" onclick="addContactedPeopleOnProfile(-1)"><i class="fas fa-chevron-left"></i></button>
                         </div>
                         <div class="col-10 d-flex justify-content-center" id="buttons-below">
                             
                         </div>
                         <div class="col-1 prev-button">
-                            <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-chevron-right"></i></button>
+                            <button type="button" class="btn btn-primary btn-sm" onclick="addContactedPeopleOnProfile(1)"><i class="fas fa-chevron-right"></i></button>
                         </div>
                     </div>
                 </div>
+                <div class="col-md-8 container all-profile-content h-75" id = "addadvertisement">
+                    <div class="row border-bottom w-100 show-profile-header">
+                        <div class="col-9"><h4>Add Advertisementment</h4></div>
+                        <div class="col-3"><button type="button" class="btn btn-primary btn-sm" onclick="adding_advertisement();">Add Advertisement</button></div>
+                    </div>
+                    <div class="row people-show-container">
+                        <div class="col" id = 'adding-advertisement'>
+                            
+                        </div>
+                    </div>
+                    <div class="row choose-next-page border-top pt-2">
+                        <div class="col-1 next-button">
+                            <button type="button" class="btn btn-primary btn-sm" onclick="addAdvertisement(-1)"><i class="fas fa-chevron-left"></i></button>
+                        </div>
+                        <div class="col-10 d-flex justify-content-center" id="buttons-below">
+                            
+                        </div>
+                        <div class="col-1 prev-button">
+                            <button type="button" class="btn btn-primary btn-sm" onclick="addAdvertisement(1)"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-8 container all-profile-content h-75" id = "addingAdvertisement">
+                    <form method="POST" id="Ads-adding" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col"><h4>Adding Advertisement</h4></div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="row my-account-features justify-items-center">
+                                <div class="col-md-3 advertisement-upload-image" id="advertisement-upload-image"></div>
+                            </div>
+                            <div class="row my-account-features">
+                                <div class="col input-group">
+                                    <div class="custom-file">
+                                        <input type="file" name="ads-photo" class="custom-file-input" required id="ads-pic-upload">
+                                        <label class="custom-file-label" for="ads-pic-upload">Choose file</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="row my-account-features">
+                                <div class="col">Property Type: <input class="form-control" required name="propertyType" type="text" placeholder="propertyType" id="propertyType"></div>
+                                <div class="col">Property Address: <input class="form-control" required name="propertyAddress" type="text" placeholder="propertyAddress" id="propertyAddress"></div>
+                            </div>
+                            <div class="row my-account-features">
+                                <div class="col">Room Count: <input class="form-control" required name="roomCount" type="text" placeholder="Room Count" id="roomCount"></div>
+                                <div class="col">Price: <input class="form-control" required name="Price" type="text" placeholder="Price (in Rs.)" id="price"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row my-account-features">
+                        <div class="col">Description<textarea id="description" name="description" class="form-control" row=2></textarea></div>
+                        <div class="col">
+                            <div class="row my-account-features">
+                                <div class="col">WaterSource: <input class="form-control" required name="waterSource" type="text" placeholder="Water Source" id="waterSource"></div>
+                                <div class="col">Bathroom: <input class="form-control" required name="bathroom" type="text" placeholder="Bathroom" id="bathroom"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="col-md-3 my-account-features">
+                            <div class="col"><label class="form-check-label" for="terraceAccess">Terrace Access: </label><input class="form-control" name="terraceAccess" type="checkbox" id="terraceAccess"></div>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-primary">Confirm</button>
+                        </div>
+                    </div>
+                    
+                    </form>
+                </div>
+                
             </div>
         </div>
-    </body>
-    <script src="scripts/profile.js" type="text/javascript"></script>
-    <script src="scripts/password.js" type="text/javascript"></script>
-</html>
+        <script>
+            var contacted = '{{ contacted }}';
+            contacted = contacted.replaceAll(/&#39;|\[|\]/g,"").split(',');
+            var advertisement = '{{ ads }}';
+            
+        </script>
+        <script src="{{ url_for('static', filename='./scripts/profile.js') }}" type="text/javascript"></script>	
+        <script src="{{ url_for('static', filename='./scripts/password.js') }}"></script>
+        {% endblock %}

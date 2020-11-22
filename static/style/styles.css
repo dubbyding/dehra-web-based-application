@@ -83,16 +83,14 @@ nav{
     align-items: center;
 }
 .advertisement-image{
-    background-image: url("./img/no-image-icon-6.png");
-	background-size: contain;
-	background-position: center;
-	background-repeat: no-repeat;
+    background-color: white;
 	align-items: center;
     height: 70%;
     max-width: 20px;
     margin: 0 3%;
     padding: 0;
     border-radius:23px;
+    display: inline;
 }
 .details{
     display: none;
@@ -334,7 +332,7 @@ nav{
     cursor: pointer;
 }
 .profile-image{
-    background-image: url("{% static 'img/Rectangle\ 8.png' %}");
+    background-image: url("./img/no-image-icon-6.png");
     background-color:white;
 	background-size: cover;
 	background-position: top;
@@ -342,6 +340,17 @@ nav{
     align-items: center;
     margin-left: 10px;
     height: 100px;
+    border-radius: 20px;;
+}
+.advertisement-upload-image{
+    background-image: url("./img/no-image-icon-6.png");
+    background-color:white;
+	background-size: cover;
+	background-position: top;
+	background-repeat: no-repeat;
+    align-items: center;
+    margin-left: 10px;
+    height: 87px;
     border-radius: 20px;;
 }
 .show-profile-header{
@@ -363,7 +372,18 @@ nav{
 .display-contacted-people-onclick{
     cursor: pointer;
 }
-
+#accountdetails{
+    display: none;
+}
+#addadvertisement{
+    display: none;
+}
+#contactedpeople{
+    display: none;
+}
+#addingAdvertisement{
+    display: none;
+}
 /* For Login/Signup Page */
 .login-signup-background{
     background-image: url("./img/background.png");

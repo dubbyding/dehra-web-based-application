@@ -10,4 +10,17 @@ function showPassword(element){
         $("i",element).addClass("fa-eye").removeClass("fa-eye-slash");
     }
 }
-console.log(error)
+
+function checkpassword(){
+    var password = document.getElementById('enterPassword');
+    var repassword = document.getElementById('ReenterPassword');
+    if(password.value == repassword.value){
+        return true;
+    }else{
+        console.log('Not Equal');
+        password.classList.add("is-invalid");
+        repassword.classList.add("is-invalid");
+        return false;
+    }
+
+}
