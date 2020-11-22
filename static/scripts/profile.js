@@ -13,6 +13,7 @@ $(".for-profile-details").on('click', function(){
             document.getElementById(other).style.backgroundColor="#535353";
         }
     });
+    document.getElementById("addingAdvertisement").style.display = "none";
     if(id == 'contacted-people'){
         var counter = 0;
         var capable = Math.floor(contacted.length/8)+1;
