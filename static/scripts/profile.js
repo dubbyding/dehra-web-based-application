@@ -21,7 +21,7 @@ $(".for-profile-details").on('click', function(){
     }
     if(id == 'add-advertisement'){
         var advertisement_counter = 0;
-        var capable = Math.floor(actual_advertisement.length/8)+1;
+        var capable = Math.floor(actual_advertisement.length/4)+1;
         advertisement_counter = addadvertisementOfPeople(advertisement_counter, capable, counterNeed=1);
     }
 });
@@ -54,66 +54,78 @@ async function adding_advertisement(){
     document.getElementById("propertyAddress").value = total_address;
 }   
 
-function addadvertisementOfPeople(counter, capable, counterNeed, button=0){
+function addadvertisementOfPeople(counter, capable, counterNeed){
     var addingAds = '';
     var buttonAdding = '';
     var column = 0;
-    if(counterNeed == 1 && counter<=capable){
+    if(counterNeed == 1 && counter<capable){
         counter++;
     }
-    if(counterNeed == -1 && counter > 0){
+    
+    console.log(capable);
+    console.log(counter);
+    if(counterNeed == -1 && counter > 1){
+        console.log(counter);
         counter--;
     }
-    if(button>1){
-        counter = button;
-    }
+    buttonAdding = buttonAdding + `<div class="col-1 next-button">
+    <button type="button" class="btn btn-primary btn-sm" onclick="addadvertisementOfPeople(`+counter+`,`+ capable +`,-1)"><i class="fas fa-chevron-left"></i></button>
+    </div>
+    <div class="col-10 d-flex justify-content-center">`;
     if(capable<=5){
         for(var i=0; i<capable; i++){
             buttonAdding = buttonAdding + `<div class="button-pages">
-                    <button type="button" class="btn btn-primary btn-sm" onclick="addadvertisementOfPeople(`+counter+`,`+ capable +`,0, `+ (i+1) +`);" id="page-`+(i+1).toString() +`">`+(i+1).toString()+`</button>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="addadvertisementOfPeople(`+(i+1)+`,`+ capable +`,0);" id="page-`+(i+1).toString() +`">`+(i+1).toString()+`</button>
                 </div>`;
         }
     }else if((counter+3)>=capable){
         buttonAdding = buttonAdding + `<div class="button-pages">
-                    <button type="button" class="btn btn-primary btn-sm" onclick="addadvertisementOfPeople(`+counter+`,`+ capable +`,0, `+ (1) +`);" id="page-`+(1).toString() +`">`+(1).toString()+`</button>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="addadvertisementOfPeople(`+(1)+`,`+ capable +`,0);" id="page-`+(1).toString() +`">`+(1).toString()+`</button>
                 </div>`;
         buttonAdding = buttonAdding + `<div class="button-pages">...
             </div>`;
         for(var i=capable-3; i<capable; i++){
             buttonAdding = buttonAdding + `<div class="button-pages">
-                    <button type="button" class="btn btn-primary btn-sm" onclick="addadvertisementOfPeople(`+counter+`,`+ capable +`,0, `+ (i+1) +`);" id="page-`+(i+1).toString() +`">`+(i+1).toString()+`</button>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="addadvertisementOfPeople(`+(i+1)+`,`+ capable +`,0);" id="page-`+(i+1).toString() +`">`+(i+1).toString()+`</button>
                 </div>`;
         }
     }else{
         for(var i=counter; i<3; i++){
             buttonAdding = buttonAdding + `<div class="button-pages">
-                    <button type="button" class="btn btn-primary btn-sm" onclick="addadvertisementOfPeople(`+counter+`,`+ capable +`,0, `+ (i+1) +`);" id="page-`+(i+1).toString() +`">`+(i+1).toString()+`</button>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="addadvertisementOfPeople(`+(i+1)+`,`+ capable +`,0);" id="page-`+(i+1).toString() +`">`+(i+1).toString()+`</button>
                 </div>`;
         }
         buttonAdding = buttonAdding + `<div class="button-pages">...
             </div>`;
         buttonAdding = buttonAdding + `<div class="button-pages">
-            <button type="button" class="btn btn-primary btn-sm" onclick="addadvertisementOfPeople(`+counter+`,`+ capable +`,0, `+ (capable) +`);" id="page-`+(capable).toString() +`">`+(capable).toString()+`</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="addadvertisementOfPeople(`+(capable)+`,`+ capable +`,0);" id="page-`+(capable).toString() +`">`+(capable).toString()+`</button>
         </div>`;
     }
-    
+    buttonAdding = buttonAdding + `</div>
+    <div class="col-1 prev-button">
+        <button type="button" class="btn btn-primary btn-sm" onclick="addadvertisementOfPeople(`+counter+`,`+ capable +`,1)"><i class="fas fa-chevron-right"></i></button>
+    </div>`;
     buttons_adding = document.getElementById('buttons-below-ads');
     buttons_adding.innerHTML = buttonAdding;
-    if(actual_advertisement.length<4){
+    if(actual_advertisement.length<=4){
         var display = actual_advertisement.length-(4*(counter-1));
     }else{
-        var display = counter;
+        var display = counter*4;
+    }
+    if(display>actual_advertisement.length){
+        display = actual_advertisement.length;
     }
     for(var i = 4*(counter-1); i< display; i++){
         console.log(actual_advertisement.length);
         if(column > 1){
             column = 0;
             addingAds = addingAds + `</div>`
-        }else if(column == 0){
+        }
+        if(column == 0){
             addingAds = addingAds + `<div class="row contacted-people-show">`;
         }
-        addingAds = addingAds + `<div class="col-6 d-flex display-contacted-people-onclick align-items-center" id="displayingAdvertisement`+ actual_advertisement[i]["advertisement_id"] +`">
-            <img src="./static/style/img/temp/201123_170731_978104.jpg" width=100px height=100px>
+        addingAds = addingAds + `<div class="col-6 d-flex display-contacted-people-onclick align-items-center" id="displayingAdvertisement`+ actual_advertisement[i]["advertisement_id"]+`">
+            <img src="./static/style/img/temp/`+actual_advertisement[i]["photo"]+`" width=100px height=100px style="margin-left:5px;">
             <span id="location-name">Type:- `+actual_advertisement[i]["property_type"]+`<br> Location:- `+ actual_advertisement[i]["property_address"] +`</span>
         </div>`;
         column++;

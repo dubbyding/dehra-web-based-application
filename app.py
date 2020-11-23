@@ -4,21 +4,44 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=('GET','POST'))
 def index():
-    
-    return render_template('index.html')
+    latest_uploaded = requests.get("http://127.0.0.1:5000/advertisement/data/12")
+    if latest_uploaded.status_code == 200:
+        value = latest_uploaded.json()['advertisement_list']
+        for values in value:
+            photo_location = os.path.join('http://127.0.0.1:5000/file/', values["photo"])
+            photo_get = requests.get(photo_location)
+            if photo_get.status_code == 200:
+                current_file_location = os.path.dirname(os.path.realpath(__file__)).replace('\\','/') + '/static/style/img/temp/'
+                if not os.path.isdir(current_file_location):
+                    os.makedirs(current_file_location)
+                file_path_location = os.path.join(current_file_location, values["photo"])
+                with open(file_path_location, 'wb') as f:
+                    for chunk in photo_get:
+                        f.write(chunk)
+    if request.method == 'POST':
+        location = request.form["EnterLocation"]
+        session["location"] = location
+        return redirect(url_for("rent"))
+    return render_template('index.html', latest_upload = value)
 
 @app.route('/login', methods=('GET','POST'))
 def login():
     try:
-        if session["username"] or session["password"]:
+        if session["username"] and session["password"]:
             return redirect(url_for('index'))
     except:
         pass
     if request.method == 'POST':
         username = request.form['Username']
         password = request.form['Password']
+        try:
+            remember = request.form["RememberMe"]
+            session["rememberme"] = "on"
+        except:
+            session["rememberme"] = "off"
+            pass
         if 'username' in session:
             session['username'] = session.get('username')
         else:
@@ -40,7 +63,7 @@ def login():
 def signup():
     detail = {}
     try:
-        if session["username"] or session["password"]:
+        if session["username"] and session["password"]:
             return redirect(url_for('index'))
     except:
         pass
@@ -71,7 +94,12 @@ def signup():
 
 @app.route('/logout')
 def logout():
-    session.pop('username', None)
+    if session["rememberme"] == "on":
+        print("remembered")
+        session.pop("password", None)
+    else:
+        session.pop('username', None)
+        session.pop("password", None)
     print('ON Logout')
     return redirect(url_for('login'))
 
@@ -109,7 +137,10 @@ def profile_check():
             ads_photo = request.files["ads-photo"]
             waterSource = request.form["waterSource"]
             bathroom = request.form["bathroom"]
-            terraceAccess = request.form["terraceAccess"]
+            try:
+                terraceAccess = request.form["terraceAccess"]
+            except KeyError:
+                terraceAccess = False
             filename = secure_filename(ads_photo.filename)
             ads_photo.save("./static/style/img/temp/"+filename)
             photo = {"photo":(filename, open("./static/style/img/temp/"+filename, "rb"), "application-type")}
@@ -136,6 +167,10 @@ def messaging():
 
 @app.route('/rent')
 def rent():
+    location = session["location"]
+    session.pop('location', None)
+    if location:
+        print(location)
     return render_template("rent.html")
 def seephoto():
     ads = json.loads(requests.get('http://127.0.0.1:5000/search/sanepa').text)

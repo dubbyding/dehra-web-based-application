@@ -82,20 +82,24 @@ nav{
     display: flex;
     align-items: center;
 }
-.advertisement-image{
-    background-color: white;
+.advertisement-image-putting{
+    background-image: url("#");
+    background-color:white;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
 	align-items: center;
     height: 70%;
-    max-width: 20px;
+    max-width: 11vw;
+    transition:0.3s;
     margin: 0 3%;
-    padding: 0;
+    padding:0;
     border-radius:23px;
-    display: inline;
 }
 .details{
     display: none;
 }
-.advertisement-image:hover .details{
+.advertisement-image-putting:hover .details{
     display: flex;
     cursor: pointer;
     width:100%;
