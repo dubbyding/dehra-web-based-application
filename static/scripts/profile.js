@@ -20,13 +20,45 @@ $(".for-profile-details").on('click', function(){
         counter = addContactedPeopleOnProfile(counter, capable, counterNeed = 1);   // 1 repesentes forward and -1 represents backward
     }
     if(id == 'add-advertisement'){
-     
+        var advertisement_counter = 0;
+        var capable = Math.floor(actual_advertisement.length/8)+1;
+        
     }
 });
-
-function adding_advertisement(){
+function requestLocationByGeo(Latitude=27.6791296, Longitude=85.32459519999999){
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://us1.locationiq.com/v1/reverse.php?key=pk.aefdd1e94586b32241589dadb011b72e&lat='+ Latitude +'&lon='+ Longitude +'&format=json', true);
+    
+    return new Promise(resolve => {
+        xhr.onload = function() {
+        if (xhr.status === 200) {
+            console.log(xhr.status);
+            requestAddress = JSON.parse(xhr.responseText).address;
+            resolve(requestAddress);
+        }
+        else {
+            alert('Request failed.  Returned status of ' + xhr.status);
+        }
+    };
+    xhr.send();
+});
+}
+async function adding_advertisement(){
     document.getElementById('addadvertisement').style.display = "none";
     document.getElementById('addingAdvertisement').style.display = "block";
+    alert("GeoLocation Is taken from the brower. Please allow the use of Location. For Better performance use mobile application.")
+    locationGPS = window.GlobalVar;
+    locationGPS = locationGPS.toString().split(',');
+    request_address = await requestLocationByGeo(Latitude=parseFloat(locationGPS[0]),Longitude=parseFloat(locationGPS[1]));
+    total_address = request_address["suburb"]+','+request_address["neighbourhood"]+','+request_address["city"]+','+request_address["state"]+','+request_address["country"];
+    document.getElementById("propertyAddress").value = total_address;
+}   
+
+function addadvertisementOfPeople(counter, capable, counterNeed, button=0){
+    var addingAds = '';
+    var buttonAdding = '';
+    var column = 0;
+    
 }
 
 function addContactedPeopleOnProfile(counter, capable, counterNeed, button = 0){
@@ -80,6 +112,7 @@ function addContactedPeopleOnProfile(counter, capable, counterNeed, button = 0){
         var display = counter;
     }
     for(var i = 8*(counter-1); i< display; i++){
+        console.log(contacted.length);
         if(column > 1){
             column = 0;
             addingPeople = addingPeople + `</div>`

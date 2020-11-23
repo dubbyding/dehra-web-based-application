@@ -26,7 +26,8 @@ def login():
         session["password"] = password
         detail = {"username": username, "password": password}
         headers = {'content-type': 'application/json'}
-        a = requests.post('http://127.0.0.1:5000/login', data=detail, headers=headers)
+        details = json.dumps(detail)
+        a = requests.post('http://127.0.0.1:5000/login', data=details, headers=headers)
         if(a.status_code==200):
             return redirect(url_for('index'))
         elif a.status_code==400:
@@ -76,6 +77,21 @@ def logout():
 
 @app.route('/profile', methods=("POST","GET"))
 def profile_check():
+    userdata = requests.get('http://127.0.0.1:5000/user-data/' + session['username']).json()
+    ads_location = os.path.join('http://127.0.0.1:5000/advertisement/user/', str(userdata['userid']))
+    userAds = requests.get(ads_location)
+    user_ads_data = userAds.json()
+    for values in user_ads_data["advertisement_list"]:
+        photo_location = os.path.join('http://127.0.0.1:5000/file/', values["photo"])
+        photo_get = requests.get(photo_location)
+        if photo_get.status_code == 200:
+            current_file_location = os.path.dirname(os.path.realpath(__file__)).replace('\\','/') + '/static/style/img/temp/'
+            if not os.path.isdir(current_file_location):
+                os.makedirs(current_file_location)
+            file_path_location = os.path.join(current_file_location, values["photo"])
+            with open(file_path_location, 'wb') as f:
+                for chunk in photo_get:
+                    f.write(chunk)
     if request.method == "POST":
         try:
             username = request.form["Username"]
@@ -97,7 +113,6 @@ def profile_check():
             filename = secure_filename(ads_photo.filename)
             ads_photo.save("./static/style/img/temp/"+filename)
             photo = {"photo":(filename, open("./static/style/img/temp/"+filename, "rb"), "application-type")}
-            userdata = requests.get('http://127.0.0.1:5000/user-data/' + session['username']).json()
             datas = {
                 "user_id" : userdata["userid"],
                 "property_type" : propertyType,
@@ -113,7 +128,7 @@ def profile_check():
             sendAdsData = requests.post('http://127.0.0.1:5000/advertisement', data = datas, files=photo)
             if(sendAdsData.status_code == 200):
                 return redirect(url_for('profile_check'))
-    return render_template('profile.html')
+    return render_template('profile.html', user_ads_data=user_ads_data["advertisement_list"])
 
 @app.route('/chatting')
 def messaging():
