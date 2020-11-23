@@ -160,6 +160,4 @@ def seephoto():
 
 if __name__=='__main__':
     app.config['SECRET_KEY'] = 'secrethaiguys'
-
-    print(type(session))
     app.run(port=5001, debug=True)  
