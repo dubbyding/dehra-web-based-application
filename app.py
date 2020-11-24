@@ -167,10 +167,12 @@ def messaging():
 
 @app.route('/rent')
 def rent():
-    location = session["location"]
-    session.pop('location', None)
-    if location:
+    try:
+        location = session["location"]
         print(location)
+        session.pop('location', None)
+    except:
+        print("Hi")
     return render_template("rent.html")
 def seephoto():
     ads = json.loads(requests.get('http://127.0.0.1:5000/search/sanepa').text)

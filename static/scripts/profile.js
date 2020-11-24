@@ -50,7 +50,7 @@ async function adding_advertisement(){
     locationGPS = window.GlobalVar;
     locationGPS = locationGPS.toString().split(',');
     request_address = await requestLocationByGeo(Latitude=parseFloat(locationGPS[0]),Longitude=parseFloat(locationGPS[1]));
-    total_address = request_address["suburb"]+','+request_address["neighbourhood"]+','+request_address["city"]+','+request_address["state"]+','+request_address["country"];
+    total_address = request_address["suburb"]+', '+request_address["neighbourhood"]+', '+request_address["city"]+', '+request_address["state"]+', '+request_address["country"];
     document.getElementById("propertyAddress").value = total_address;
 }   
 
