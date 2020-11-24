@@ -165,35 +165,23 @@ def profile_check():
 def messaging():
     return render_template('chatting.html')
 
-@app.route('/rent')
+@app.route('/rent', methods=("POST", "GET"))
 def rent():
     try:
         location = session["location"]
-        print(location)
         session.pop('location', None)
+        location_search_address = "http//127.0.0.1:5000/search/" + location
+        location_search_ads = requests.get("http://127.0.0.1:5000/search/" + location)
+        if location_search_ads.status_code == 200:
+            location_searched_ads = location_search_ads.json()["advertisement_list"]
+            print(location_searched_ads)
+        return render_template("rent.html", location=location, location_searched_ads=location_searched_ads)
     except:
         print("Hi")
+    if request.method == 'POST':
+        session["location"] = request.form["EnterLocation"]
+        return redirect(url_for("rent"))
     return render_template("rent.html")
-def seephoto():
-    ads = json.loads(requests.get('http://127.0.0.1:5000/search/sanepa').text)
-    l = ads["advertisement_list"]
-    photo_list = []
-    for filetbs in l:
-        filetbs = filetbs["photo"]
-        photo_list.append(filetbs)
-        print(filetbs)
-        location_file = os.path.join('http://127.0.0.1:5000/file/',filetbs)
-        a = requests.get(location_file)
-        print(a)
-        if a.status_code == 200:
-            current_file_location = os.path.dirname(os.path.realpath(__file__)).replace('\\','/') + '/static/style/img/temp/'
-            if not os.path.isdir(current_file_location):
-                os.makedirs(current_file_location)
-            file_path_location = os.path.join(current_file_location, filetbs)
-            with open(file_path_location, 'wb') as f:
-                for chunk in a:
-                    f.write(chunk)
-    print(photo_list)
 
 if __name__=='__main__':
     app.config['SECRET_KEY'] = 'secrethaiguys'

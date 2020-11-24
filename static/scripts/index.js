@@ -2,7 +2,6 @@
 $(document).ready(function(){
     var counter1=0;
     var counter2=0;
-    major_cities = document.getElementById("major-cities-loading");
     new_actual_advertisement = actual_advertisement;
     capable = new_actual_advertisement.length;
     counter1 = displayAds(new_actual_advertisement, counter1, capable, counterNeed = 1);

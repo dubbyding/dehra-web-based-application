@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+    <script src="{{ url_for('static', filename='./scripts/rent.js') }}" type="text/javascript"></script>
         <!-- For Renting content-->
         <div class="container-fluid page-container">
             <div class="row renting-page">
@@ -10,162 +11,33 @@
                             <h4 class="search-details-heading">Search Details:</h4>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col input-group">
-                            <input type="text" class="form-control" id="EnterLocation" placeholder="Enter The Location" aria-label="Enter The Location" aria-describedby="button-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i class="fas fa-search"></i></button>
+                    <form method="POST">
+                        <div class="row">
+                            <div class="col input-group">
+                                <input type="text" name="EnterLocation" class="form-control" id="EnterLocation" required placeholder="Enter The Location" value="{{location}}" aria-label="Enter The Location">
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col form-group">
-                            <label for="forLocation">Minimum Price: </label>
-                            <input type="text" class="form-control" id="forLocation" placeholder="Enter Minimum Price">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col form-group">
-                            <label for="forLocation">Maximum Price: </label>
-                            <input type="text" class="form-control" id="forLocation" placeholder="Enter Maximum Price">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
                 </div>
                 <!-- Renting Showing Column-->
                 <div class="col-md-10 advertisement-showing-col">
-                    <div class="row pt-3 page-choose top-page-choose">
-                        <div class="col-1 next-button">
-                            <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-chevron-left"></i></button>
-                        </div>
-                        <div class="col-10 d-flex justify-content-center">
-                            <div class="button-pages">
-                                <button type="button" class="btn btn-primary btn-sm" id="page-first">1</button>
-                            </div>
-                            <div class="button-pages">
-                                <button type="button" class="btn btn-primary btn-sm" id="page-second">2</button>
-                            </div>
-                            <div class="button-pages">
-                                ...
-                            </div>
-                            <div class="button-pages">
-                                <button type="button" class="btn btn-primary btn-sm" id="page-last">N</button>
-                            </div>
-                        </div>
-                        <div class="col-1 prev-button">
-                            <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-chevron-right"></i></button>
-                        </div>
+                    <div class="row pt-3 page-choose top-page-choose" id="button-adding-top">
                         
                     </div>
                     <div class="row content-inside">
-                        <div class="col-12">
-                            <div class="row content-inside-row">
-                                <div class="col-3 d-flex justify-content-center align-items-center">
-                                    <div class = "col-2 advertisement-image rent-ads-img" id="1-ad-img" data-toggle="modal" data-target="#myModal">
-                                        <p class="details justify-content-left" id="1-ad-details">
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="col-3 d-flex justify-content-center align-items-center">
-                                    <div class = "col-2 advertisement-image rent-ads-img" id="2-ad-img" data-toggle="modal" data-target="#myModal">
-                                        <p class="details justify-content-left" id="1-ad-details">
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="col-3 d-flex justify-content-center align-items-center">
-                                    <div class = "col-2 advertisement-image rent-ads-img" id="3-ad-img" data-toggle="modal" data-target="#myModal">
-                                        <p class="details justify-content-left" id="1-ad-details">
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="col-3 d-flex justify-content-center align-items-center">
-                                    <div class = "col-2 advertisement-image rent-ads-img" id="4-ad-img" data-toggle="modal" data-target="#myModal">
-                                        <p class="details justify-content-left" id="1-ad-details">
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row content-inside-row">
-                                <div class="col-3 d-flex justify-content-center align-items-center">
-                                    <div class = "col-2 advertisement-image rent-ads-img" id="5-ad-img" data-toggle="modal" data-target="#myModal">
-                                        <p class="details justify-content-left" id="1-ad-details">
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="col-3 d-flex justify-content-center align-items-center">
-                                    <div class = "col-2 advertisement-image rent-ads-img" id="6-ad-img" data-toggle="modal" data-target="#myModal">
-                                        <p class="details justify-content-left" id="1-ad-details">
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="col-3 d-flex justify-content-center align-items-center">
-                                    <div class = "col-2 advertisement-image rent-ads-img" id="7-ad-img" data-toggle="modal" data-target="#myModal">
-                                        <p class="details justify-content-left" id="1-ad-details">
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="col-3 d-flex justify-content-center align-items-center">
-                                    <div class = "col-2 advertisement-image rent-ads-img" id="8-ad-img" data-toggle="modal" data-target="#myModal">
-                                        <p class="details justify-content-left" id="1-ad-details">
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row content-inside-row">
-                                <div class="col-3 d-flex justify-content-center align-items-center">
-                                    <div class = "col-2 advertisement-image rent-ads-img" id="9-ad-img" data-toggle="modal" data-target="#myModal">
-                                        <p class="details justify-content-left" id="1-ad-details">
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="col-3 d-flex justify-content-center align-items-center">
-                                    <div class = "col-2 advertisement-image rent-ads-img" id="10-ad-img" data-toggle="modal" data-target="#myModal">
-                                        <p class="details justify-content-left" id="1-ad-details">
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="col-3 d-flex justify-content-center align-items-center">
-                                    <div class = "col-2 advertisement-image rent-ads-img" id="11-ad-img" data-toggle="modal" data-target="#myModal">
-                                        <p class="details justify-content-left" id="1-ad-details">
-                                        </p>
-                                    </div>
-                                </div>
-                                <div class="col-3 d-flex justify-content-center align-items-center">
-                                    <div class = "col-2 advertisement-image rent-ads-img" id="12-ad-img" data-toggle="modal" data-target="#myModal">
-                                        <p class="details justify-content-left" id="1-ad-details">
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col-12" id="Searched-ads-displaying">
+                            
                         </div>
                     </div>
-                    <div class="row pt-3 page-choose bottom-page-choose">
-                        <div class="col-1 next-button">
-                            <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-chevron-left"></i></button>
-                        </div>
-                        <div class="col-10 d-flex justify-content-center">
-                            <div class="button-pages">
-                                <button type="button" class="btn btn-primary btn-sm" id="page-first">1</button>
-                            </div>
-                            <div class="button-pages">
-                                <button type="button" class="btn btn-primary btn-sm" id="page-second">2</button>
-                            </div>
-                            <div class="button-pages">
-                                ...
-                            </div>
-                            <div class="button-pages">
-                                <button type="button" class="btn btn-primary btn-sm" id="page-last">N</button>
-                            </div>
-                        </div>
-                        <div class="col-1 prev-button">
-                            <button type="button" class="btn btn-primary btn-sm"><i class="fas fa-chevron-right"></i></button>
-                        </div>
+                    <div class="row pt-3 page-choose bottom-page-choose" id="button-adding-bottom">
+                        
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Modal -->
-        <div class="modal fade" id="myModal" role="dialog">
+         <!-- Modal -->
+         <div class="modal fade" id="myModal" role="dialog">
             <div class="modal-dialog modal-lg">
                 <!-- Modal content-->
                 <div class="modal-content">
@@ -180,29 +52,8 @@
                             <div class = "row">
                                 <div class = "col-md-9">
                                     <div class="row inner-row">
-                                        <div class="col">
-                                            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                                                <div class="carousel-inner">
-                                                    <div class="carousel-item active">
-                                                        <img class="d-block w-100" src="img/cover.png" alt="First slide">
-                                                    </div>
-                                                    <div class="carousel-item">
-                                                        <img class="d-block w-100" src="img/cover.png" alt="Second slide">
-                                                    </div>
-                                                    <div class="carousel-item">
-                                                        <img class="d-block w-100" src="img/cover.png" alt="Third slide">
-                                                    </div>
-                                                </div>
-                                                <!-- Controls-->
-                                                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                <span class="sr-only">Previous</span>
-                                                </a>
-                                                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                <span class="sr-only">Next</span>
-                                                </a>
-                                            </div>
+                                        <div class="col" id="Showing-images-full">
+                                            
                                         </div>
                                     </div>
                                     <div class="row">
@@ -236,12 +87,12 @@
                                     </div>
                                     <div class="row">
                                         <div class="col">
-                                            <span class="detail-heading">Terrace Access: </span> <span class="details-property" id="room-count">Given</span>
+                                            <span class="detail-heading">Terrace Access: </span> <span class="details-property" id="terraceAccess">Given</span>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col">
-                                            <span class="detail-heading">Details: </span> <span class="details-property" id="room-count">Elit cupidatat enim aute officia.</span>
+                                            <span class="detail-heading">Details: </span> <span class="details-property" id="details">Elit cupidatat enim aute officia.</span>
                                         </div>
                                     </div>
                                 </div>
@@ -251,11 +102,31 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-primary mr-auto">Chat Now</button>
                         <div class="owner-show">
-                            <span class="detail-heading">Owner: </span><span id="property-owner">Raj Maharjan</span>
+                            <b>Owner:</b> <span id="property-owner">Raj Maharjan</span>
                         </div>
                     </div>
                 </div>
             
             </div>
         </div>
+        <script>
+            var advertisement = "{{ location_searched_ads|safe }}";
+            console.log(typeof advertisement !== 'undefined');
+            console.log(advertisement !== "");
+            if(advertisement !== ""){
+                advertisement_data = advertisement.replaceAll(/\[|\]/g,"").replaceAll(/}, {/g, "} , {").split(' , ');
+                actual_advertisement = [];
+                for(var i = 0; i<advertisement_data.length; i++){
+                    each_detail = advertisement_data[i].replaceAll(/}|{/g,"").split(", ");
+                    single_ads = [];
+                    for(var j = 0; j<each_detail.length;j++){
+                        single_values = each_detail[j].replaceAll(/'/g,"").split(": ");
+                        single_ads[single_values[0]] = single_values[1];
+
+                    }
+                    actual_advertisement[i] =  single_ads;
+                }
+                console.log(actual_advertisement);
+            }
+        </script>
 {% endblock %}
