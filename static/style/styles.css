@@ -48,7 +48,8 @@ nav{
 	transform: translate(-50%, -50%);
 	color: white;
 	border-radius: 33px;
-	background-color: rgba(0, 0, 0, 0.9);
+    background-color: rgba(0, 0, 0, 0.9);
+    width: 50vw;
 }
 .location-searching{
 	padding: 20px 20px 20px 20px;

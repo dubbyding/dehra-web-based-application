@@ -8,7 +8,6 @@ $(document).ready(function(){
     counter2 = displayAdsLatest(actual_advertisement, counter2, capable, counterNeed = 1);
     $(".advertisement-image-putting").on('click', function () {
         document.getElementById("someRandomText").style.color="black";
-        console.log(parseInt(String($(this).attr('id')).split("-")[0]));
         ads_id = parseInt(String($(this).attr('id')).split("-")[0]);
         for(var i=0;i<new_actual_advertisement.length;i++){
             if(new_actual_advertisement[i]["advertisement_id"] == ads_id){
@@ -27,6 +26,8 @@ $(document).ready(function(){
         document.getElementById("bathroom").innerHTML = actual_advertisement[list_index]["bathroom"];
         document.getElementById("details").innerHTML = actual_advertisement[list_index]["description"];
         document.getElementById("property-owner").innerHTML = actual_advertisement[list_index]["username"];
+        document.getElementById("owner").value = actual_advertisement[list_index]["username"];
+        console.log(document.getElementById("property-owner").innerHTML);
     });
 });
 function displayAdsLatest(advertisement_putting, counter, capable, counterNeed){
@@ -130,5 +131,5 @@ function shuffle(array) {
     }
   
     return array;
-  }
-  
+}
+

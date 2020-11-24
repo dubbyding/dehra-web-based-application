@@ -20,15 +20,6 @@
 							</div>
 						</div>
 					</div>
-					<div class="row form-group">
-						<div class="col-md-5">
-							<label for="formGroup1" class="price-range-label">Minimum Price: </label>
-							<span class="price-range"><input type="text" class="form-control price-input" id="formGroup1" placeholder="Min Price"></span>
-						</div>
-						<div class="col-md-5">
-							<label for="formGroup2" class="price-range-label">Maximum Price: </label>
-							<span class="price-range"><input type="text" class="form-control price-input" id="formGroup2" placeholder="Max Price"></span>						</div>
-					</div>
 				</form>   
 			</div>
 		</div>
@@ -56,9 +47,11 @@
 		<!-- Details -->
 		<div class="container-fluid simple-details">
             <div class="row item-three">
+                {% if not session['username'] and not session['password'] %}
                 <div class="col align-items-start justify-content-center">
                     <i class="fas feature-icons fa-user-friends"></i>
                 </div>
+                {% endif %}
                 <div class="col">
                     <i class="fas feature-icons fa-home"></i>
                 </div>
@@ -67,9 +60,11 @@
                 </div>
             </div>
             <div class="row item-three">
+                {% if not session['username'] and not session['password'] %}
                 <div class="col align-items-center">
                     Connect with homeowner and communicate with them through the in built chat feature
                 </div>
+                {% endif %}
                 <div class="col">
                     Check all of the available rooms for rent and choose your prefered one
                 </div>
@@ -78,9 +73,11 @@
                 </div>
             </div>
             <div class="row item-three">
+                {% if not session['username'] and not session['password'] %}
                 <div class="col align-items-end">
                     <button type="button" class="btn btn-primary">Sign Up</button>
                 </div>
+                {% endif %}
                 <div class="col">
                     <button type="button" class="btn btn-primary">Search For Rooms</button>
                 </div>
@@ -152,12 +149,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary mr-auto">Chat Now</button>
+                    <form class="modal-footer" method="POST">
+                        <input type="hidden" name="owner" id="owner"> 
+                        <button type="submit" class="btn btn-primary mr-auto">Chat Now</button>
                         <div class="owner-show">
                             <b>Owner:</b> <span id="property-owner">Raj Maharjan</span>
                         </div>
-                    </div>
+                    </form>
                 </div>
             
             </div>

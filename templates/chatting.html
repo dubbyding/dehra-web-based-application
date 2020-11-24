@@ -68,20 +68,13 @@
                         </div>
                     </div>
                     <div class="row chat-area align-items-end">
-                        <div class="col">
-                            <div class="row">
-                                <div class="col">
-                                </div>
-                            </div>
-                            <div class="row justify-content-flex-end">
-                                <div class="col">
-                                </div>
-                            </div>
+                        <div class="col" id="messages">
+                            
                         </div>
                     </div>
                     <div class="row texting-area">
                         <div class="col align-items-center input-group">
-                            <input type="text" class="form-control " id="message" placeholder="Type A Message" aria-label="Type A Message" aria-describedby="message-send">
+                            <input type="text" class="form-control " id="message_input" placeholder="Type A Message" aria-label="Type A Message" aria-describedby="message-send">
                             <div class="input-group-append ">
                                 <button class="btn btn-outline-secondary" type="submit" id="message-send"><i class="fas fa-paper-plane message-send-icon"></i></button>
                             </div>
@@ -92,4 +85,30 @@
                 </div>
             </div>
         </div>
-        {% endblock %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+        <script>
+
+            var data = `{{ data|safe }}`;      
+            if(data !== ""){
+                data_data = data.replaceAll(/\[|\]/g,"").replaceAll(/}, {/g, "} , {").split(' , ');
+                console.log(data_data);
+                actual_data = [];
+                for(var i = 0; i<data_data.length; i++){
+                    each_detail = data_data[i].replaceAll(/}|{/g,"").split(", ");
+                    single_ads = [];
+                    for(var j = 0; j<each_detail.length;j++){
+                        single_values = each_detail[j].replaceAll(/'/g,"").split(": ");
+                        single_ads[single_values[0].replaceAll(/"/g,"")] = single_values[1].replaceAll(/"/g,"");
+                    }
+                    console.log(single_ads);
+                    actual_data =  single_ads;
+                }
+            }
+            console.log(actual_data['username']);
+            var displayChat = "{{ displayChat|tojson|safe }}";
+            displayChat = (displayChat==="true");
+            
+            roomId = `{{ getRoomId|safe }}`;
+            console.log(roomId);
+        </script>
+{% endblock %}

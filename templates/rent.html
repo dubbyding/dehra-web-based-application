@@ -100,7 +100,12 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary mr-auto">Chat Now</button>
+                        {% if not session['username'] and not session['password'] %}
+                        <a href="{{ url_for('login') }}">
+                        {% else %}
+                        <a href="{{ url_for('messaging') }}"></a>
+                        {% endif %}
+                        <button type="button" class="btn btn-primary mr-auto">Chat Now</button></a>
                         <div class="owner-show">
                             <b>Owner:</b> <span id="property-owner">Raj Maharjan</span>
                         </div>

@@ -1,0 +1,22 @@
+@socketio.on('joined_room')
+def handle_join_room_event(data):
+    value = requests.get("http://127.0.0.1/getMessage/"+data["room_no"])
+    cur.execute("SELECT id, username, messages FROM message WHERE room_id = %s",(data['room'],))
+    value = cur.fetchall()
+    join_room(data['room'])
+    if value is not None:
+        socketio.emit('rejoin_room', value,room=data["room"])
+    socketio.emit('join_room_announcement', data, room = data["room"], broadcast=True, include_self=False)
+
+@socketio.on('send_message')
+def handle_send_messsage_event(data):
+    cur.execute("""INSERT INTO message (room_id, username, messages)
+        VALUES (%(room)s, %(username)s, %(message)s);
+        """,{'room': data['room'], 'username': data['username'],'message': data['message']})
+    conn.commit()
+    app.logger.info("{} has sent message to the room {}: {}". format(data["username"], data['room'], data["message"]))
+    socketio.emit('recieve_message', data, room=data['room'])
+
+@socketio.on('typing_status')
+def typing_status_handler(data):
+    socketio.emit('typing_on',data ,broadcast=True, include_self=False)

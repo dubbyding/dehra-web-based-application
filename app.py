@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import requests, json, os
 from werkzeug.utils import secure_filename
+from flask_socketio import SocketIO, join_room
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 
 @app.route('/', methods=('GET','POST'))
 def index():
@@ -21,9 +23,18 @@ def index():
                     for chunk in photo_get:
                         f.write(chunk)
     if request.method == 'POST':
-        location = request.form["EnterLocation"]
-        session["location"] = location
-        return redirect(url_for("rent"))
+        try:
+            owner = request.form["owner"]
+            session["owner"] = owner
+            return redirect(url_for("messaging"))
+        except:
+            pass
+        try:
+            location = request.form["EnterLocation"]
+            session["location"] = location
+            return redirect(url_for("rent"))
+        except:
+            pass
     return render_template('index.html', latest_upload = value)
 
 @app.route('/login', methods=('GET','POST'))
@@ -161,9 +172,78 @@ def profile_check():
                 return redirect(url_for('profile_check'))
     return render_template('profile.html', user_ads_data=user_ads_data["advertisement_list"])
 
-@app.route('/chatting')
+@app.route('/chatting', methods=("POST","GET"))
 def messaging():
-    return render_template('chatting.html')
+    data = None
+    if not session.get("owner") is None:
+        owner = session["owner"]
+        session.pop("owner", None)
+        ownerdata = requests.get('http://127.0.0.1:5000/user-data/' + owner).json()
+        renterdata = requests.get('http://127.0.0.1:5000/user-data/' + session['username']).json()
+        chatting_requesting_json = {
+            "owner_id": ownerdata["userid"],
+            "renter_id": renterdata["userid"]
+        }
+        chatting_requesting_json = json.dumps(chatting_requesting_json)
+        headers = {"Content-Type": "application/json"}
+        chatting_room_id = requests.post("http://127.0.0.1:5000/chat_id", data=chatting_requesting_json, headers=headers)
+        if chatting_room_id.status_code == 200:
+            room_no = chatting_room_id.json()["chat_user_id"]
+            data = {
+                "username": session["username"],
+                "room_no": room_no
+            }
+            data = json.dumps(data)
+            display_chat=True
+    else:
+        display_chat=False
+        data={
+            "username": session["username"]
+        }
+    
+    userdata = requests.get('http://127.0.0.1:5000/user-data/' + session['username']).json()
+    get_room_id = requests.get('http://127.0.0.1:5000/room_id/'+str(userdata["userid"])).json()
+    get_users = requests.get('http://127.0.0.1:5000/user-id-from/'+str(get_room_id["room_id"])).json()
+    print(get_users)
+    ownerdata = requests.get('http://127.0.0.1:5000/user-data-id/' + str(get_users["owner"])).json()
+    renterdata = requests.get('http://127.0.0.1:5000/user-data-id/' + str(get_users["renter"])).json()
+    print(ownerdata)
+    return render_template('chatting.html', data = data, displayChat=display_chat, getRoomId=get_room_id)
+
+@socketio.on('joined_room')
+def handle_join_room_event(data):
+    address = "http://127.0.0.1:5000/getMessage/"+data["room"]
+    value = requests.get(address)
+    if value.status_code == 200:
+        item = value.json()["message_index"]
+        user_id_list=[]
+        message_list=[]
+        for i in item:
+            user_id, message = [value for key, value in i.items()]
+            user_id_list.append(user_id)
+            message_list.append(message)
+        for_usernames = list(set(user_id_list))
+        usernames=[]
+        username_dicts={}
+        for id in for_usernames:
+            user_searching_address = 'http://127.0.0.1:5000/user-data-id/'+str(id)
+            user = requests.get(user_searching_address).json()
+            usernames.append(user["username"])
+        for i, names in enumerate(usernames):
+            username_dicts[for_usernames[i]] = names
+        messages_dict={}
+        for i, messages in enumerate(message_list):
+            messages_dict[user_id_list[i]] = messages
+        datas = {
+            "Username": username_dicts,
+            "Message": messages_dict
+        }
+
+        join_room(data['room'])
+
+        if value is not None:
+            socketio.emit('join_room', datas, room=data["room"])
+        
 
 @app.route('/rent', methods=("POST", "GET"))
 def rent():
