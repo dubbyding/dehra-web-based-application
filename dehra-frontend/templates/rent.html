@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% block content %}
+    <script src="{{ url_for('static', filename='./scripts/rent.js') }}" type="text/javascript"></script>
+        <!-- For Renting content-->
+        <div class="container-fluid page-container">
+            <div class="row renting-page">
+                <!-- Searching details Column-->
+                <div class="col-md-2  search-details">
+                    <div class="row">
+                        <div class="col">
+                            <h4 class="search-details-heading">Search Details:</h4>
+                        </div>
+                    </div>
+                    <form method="POST">
+                        <div class="row">
+                            <div class="col input-group">
+                                <input type="text" name="EnterLocation" class="form-control" id="EnterLocation" required placeholder="Enter The Location" value="{{location}}" aria-label="Enter The Location">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+                <!-- Renting Showing Column-->
+                <div class="col-md-10 advertisement-showing-col">
+                    <div class="row pt-3 page-choose top-page-choose" id="button-adding-top">
+                        
+                    </div>
+                    <div class="row content-inside">
+                        <div class="col-12" id="Searched-ads-displaying">
+                            
+                        </div>
+                    </div>
+                    <div class="row pt-3 page-choose bottom-page-choose" id="button-adding-bottom">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+         <!-- Modal -->
+         <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="color: black">
+                            <p id="someRandomText"></p>
+                        </h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            <div class = "row">
+                                <div class = "col-md-9">
+                                    <div class="row inner-row">
+                                        <div class="col" id="Showing-images-full">
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="location-show">
+                                                <span class="detail-heading">Location: </span> <span class="details-property" id="property-location">Chamati, Kathmandu</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="price-show">
+                                                <span class="detail-heading">Price: </span> <span class="details-property" id="property-price">Rs. 20000</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="row">
+                                        <div class="col">
+                                            <span class="detail-heading">Room Count: </span><span class="details-property" id="room-count">2</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <span class="detail-heading">Water Source: </span> <span class="details-property" id="water-source">Well</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <span class="detail-heading">Bathroom: </span> <span class="details-property" id="bathroom">Attached</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <span class="detail-heading">Terrace Access: </span> <span class="details-property" id="terraceAccess">Given</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <span class="detail-heading">Details: </span> <span class="details-property" id="details">Elit cupidatat enim aute officia.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {% if not session['username'] and not session['password'] %}
+                        <a href="{{ url_for('login') }}">
+                        {% else %}
+                        <a href="{{ url_for('messaging') }}"></a>
+                        {% endif %}
+                        <button type="button" class="btn btn-primary mr-auto">Chat Now</button></a>
+                        <div class="owner-show">
+                            <b>Owner:</b> <span id="property-owner">Raj Maharjan</span>
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+        </div>
+        <script>
+            var images = "{{ photo_link|safe }}";
+            images_link_list = images.replaceAll(/\[|\]|\'/g,"").split(',');
+            console.log(images_link_list);
+            var advertisement = "{{ location_searched_ads|safe }}";
+            console.log(typeof advertisement !== 'undefined');
+            console.log(advertisement !== "");
+            if(advertisement !== ""){
+                advertisement_data = advertisement.replaceAll(/\[|\]/g,"").replaceAll(/}, {/g, "} , {").split(' , ');
+                actual_advertisement = [];
+                for(var i = 0; i<advertisement_data.length; i++){
+                    each_detail = advertisement_data[i].replaceAll(/}|{/g,"").split(", ");
+                    single_ads = [];
+                    for(var j = 0; j<each_detail.length;j++){
+                        single_values = each_detail[j].replaceAll(/'/g,"").split(": ");
+                        single_ads[single_values[0]] = single_values[1];
+
+                    }
+                    actual_advertisement[i] =  single_ads;
+                }
+                console.log(actual_advertisement);
+            }
+        </script>
+{% endblock %}
