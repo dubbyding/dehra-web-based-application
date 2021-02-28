@@ -53,23 +53,23 @@
                 <div class="col-md-6 chatting-message-section" id="showing-chatting-area">
                     <div class="row chatting-to-user">
                         <div class="col d-flex align-items-center">
-                            <i class="fas fa-user user-face"></i>
-                            <span id="username-chatting">Username</span>
+                            <i class="fas fa-user user-face" id="user-face-showing"></i>
+                            <span id="username-chatting"></span>
                         </div>
                     </div>
                     <div class="row chat-area align-items-end">
-                        <div class="col" id="messages">
-                            
+                            <div class="col" id="messages">
+                                
                         </div>
                     </div>
-                    <div class="row texting-area">
+                    <form class="row texting-area" id="message_input_form">
                         <div class="col align-items-center input-group">
-                            <input type="text" class="form-control " id="message_input" placeholder="Type A Message" aria-label="Type A Message" aria-describedby="message-send">
+                            <input type="text" class="form-control" id="message_input" placeholder="Type A Message" autocomplete="off" aria-label="Type A Message" aria-describedby="message-send">
                             <div class="input-group-append ">
-                                <button class="btn btn-outline-secondary" type="submit" id="message-send"><i class="fas fa-paper-plane message-send-icon"></i></button>
+                                <button class="btn btn-outline-secondary" type="button" id="message-send"><i class="fas fa-paper-plane message-send-icon"></i></button>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
                 <div class="col-md-3 texting-details-send" id="details-for-texting">
                 </div>
@@ -111,7 +111,7 @@
                     roomId.push(single_id_collection);
                 }
             }
-            console.log(roomId[0]["room_id"]);
+            console.log(roomId);
         </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 {% endblock %}

@@ -106,17 +106,14 @@ def rent():
         location_search_ads = requests.get("http://127.0.0.1:5000/search/" + location)
         if location_search_ads.status_code == 200:
             location_searched_ads = location_search_ads.json()["advertisement_list"]
-            print(location_searched_ads[0]['advertisement_id'])
             photo_link = []
             for values in location_searched_ads:
-                print(values['advertisement_id'])
                 photo_location = os.path.join('http://127.0.0.1:5000/file/', values["photo"])
                 photo_get = requests.get(photo_location).json()
-                print(photo_get)
                 photo_link.append(photo_get)
         return render_template("rent.html", location=location, location_searched_ads=location_searched_ads, photo_link=photo_link)
     except Exception as e:
-        print(e)
+        pass
     if request.method == 'POST':
         session["location"] = request.form["EnterLocation"]
         return redirect(url_for("rent"))
@@ -125,17 +122,14 @@ def rent():
 @app.route('/logout')
 def logout():
     if session["rememberme"] == "on":
-        print("remembered")
         session.pop("password", None)
     else:
         session.pop('username', None)
         session.pop("password", None)
-    print('ON Logout')
     return redirect(url_for('login'))
 
 @app.route('/profile', methods=("POST","GET"))
 def profile_check():
-    print(session["username"])
     userdata = requests.get('http://127.0.0.1:5000/user-data/' + session['username']).json()
     ads_location = os.path.join('http://127.0.0.1:5000/advertisement/user/', str(userdata['userid']))
     userAds = requests.get(ads_location)
@@ -218,10 +212,8 @@ def messaging():
             data = json.dumps(data)
     userdata = requests.get('http://127.0.0.1:5000/user-data/' + session['username']).json()
     all_room_id = requests.get('http://127.0.0.1:5000/user-id/' + str(userdata["userid"]))
-    print(all_room_id)
     if all_room_id.status_code == 200:
         get_room_id = all_room_id.json()["Message"]
-        print(get_room_id)
         data=[]
         for ids in get_room_id:
             ownerdata = requests.get('http://127.0.0.1:5000/user-data-id/' + str(ids["owner"])).json()
@@ -233,7 +225,7 @@ def messaging():
                     {
                         "owner_name": ownerdata["username"],
                         "renter_name": renterdata["username"],
-                        "message": latestMessage["latest_message"]
+                        "message": latestMessage[0]["latest_message"]
                     }
                 )
             else:
@@ -246,7 +238,6 @@ def messaging():
                             "message": latestMessage["Message"]
                         }
                     )
-            print(data)
         return render_template('chatting.html',data=data, displayChat=True, getRoomId=get_room_id)
     else:
         return render_template('chatting.html',data=data, displayChat=False)
@@ -275,17 +266,31 @@ def handle_join_room_event(data):
         messages_dict={}
         for i, messages in enumerate(message_list):
             messages_dict[user_id_list[i]] = messages
+        print(messages_dict)
         datas = {
             "Username": username_dicts,
             "Message": messages_dict
         }
-
         join_room(data['room'])
 
         if value is not None:
             socketio.emit('join_room', datas, room=data["room"])
         
-
+@socketio.on('send_message')
+def handle_send_messsage_event(data):
+    message_posting_json = json.dumps({
+            "message": data["message"],
+            "sent_user": data["username"],
+            "room_id": data["room"]
+        }
+    )
+    headers = {"Content-Type": "application/json"}
+    username = requests.get('http://127.0.0.1:5000/user-data-id/'+data["username"]).json()
+    data["username"] = username["username"]
+    message_adding_to_database = requests.post("http://127.0.0.1:5000/message", data=message_posting_json, headers=headers)
+    if not message_adding_to_database.status_code == 200:
+        print("error")
+    socketio.emit('recieve_message', data, room=data['room'])
 
 if __name__=='__main__':
     app.config['SECRET_KEY'] = 'secrethaiguys'
