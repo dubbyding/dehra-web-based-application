@@ -130,7 +130,7 @@ class ChatMessageModel(db.Model):
         return cls.query.filter_by(room_id=id).order_by(cls.message_id.desc()).all()
     
     @classmethod
-    def get_id(cls, id: int):
+    def get_room_id(cls, id: int):
         return cls.query.filter_by(message_id=id).first().room_id
 
     @classmethod
