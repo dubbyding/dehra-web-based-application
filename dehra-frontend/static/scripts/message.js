@@ -7,6 +7,7 @@ details = {'Location': 'Kathmandu', 'Price': "Rs. 2000 per month","Room Count": 
 var ioConnectStatus = 0;
 var checkElement = document.getElementsByClassName("messages");
 $(document).ready(function(){
+    displayAllAvailableConnectedUsers();
     ioConnectStatus = 0;
     if(displayChat){
         connectIO();
@@ -26,6 +27,15 @@ $(document).ready(function(){
         };
     });
 });
+
+function displayAllAvailableConnectedUsers(){
+    if(displayChat){
+        console.log("True");
+    }else{
+        document.getElementById("messages-show").innerHTML="No Messages";
+        document.getElementById("showing-chatting-area").innerHTML="";
+    }
+}
 
 function connectIO(){
     const socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);    // Connecting to socket io to the domain with configured protocol

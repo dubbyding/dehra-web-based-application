@@ -13,16 +13,6 @@
                                     <h4>Chatting</h4>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="EnterLocation" placeholder="Search For Messages" aria-label="Search For Messages" aria-describedby="button-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i class="fas fa-search"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="row new-messages-show">
@@ -60,7 +50,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 chatting-message-section">
+                <div class="col-md-6 chatting-message-section" id="showing-chatting-area">
                     <div class="row chatting-to-user">
                         <div class="col d-flex align-items-center">
                             <i class="fas fa-user user-face"></i>
@@ -85,7 +75,6 @@
                 </div>
             </div>
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
         <script>
 
             var data = `{{ data|safe }}`;      
@@ -105,11 +94,12 @@
                 }
             }
             console.log(actual_data['username']);
-            var displayChat = "{{ displayChat|safe }}";
-            console.log(displayChat);
+            var displayChat = "{{ displayChat }}";
             displayChat = (displayChat==="true");
+            console.log(displayChat);
             
             roomId = `{{ getRoomId|safe }}`;
             console.log(roomId);
         </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 {% endblock %}

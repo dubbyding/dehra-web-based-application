@@ -97,6 +97,30 @@ def signup():
             return render_template('signup.html', detail=detail, error_on = error["erroron"], message = error["message"])
 
     return render_template('signup.html', detail=detail)
+@app.route('/rent', methods=("POST", "GET"))
+def rent():
+    try:
+        location = session["location"]
+        session.pop('location', None)
+        location_search_address = "http//127.0.0.1:5000/search/" + location
+        location_search_ads = requests.get("http://127.0.0.1:5000/search/" + location)
+        if location_search_ads.status_code == 200:
+            location_searched_ads = location_search_ads.json()["advertisement_list"]
+            print(location_searched_ads[0]['advertisement_id'])
+            photo_link = []
+            for values in location_searched_ads:
+                print(values['advertisement_id'])
+                photo_location = os.path.join('http://127.0.0.1:5000/file/', values["photo"])
+                photo_get = requests.get(photo_location).json()
+                print(photo_get)
+                photo_link.append(photo_get)
+        return render_template("rent.html", location=location, location_searched_ads=location_searched_ads, photo_link=photo_link)
+    except Exception as e:
+        print(e)
+    if request.method == 'POST':
+        session["location"] = request.form["EnterLocation"]
+        return redirect(url_for("rent"))
+    return render_template("rent.html")
 
 @app.route('/logout')
 def logout():
@@ -200,6 +224,7 @@ def messaging():
         }
     userdata = requests.get('http://127.0.0.1:5000/user-data/' + session['username']).json()
     get_room_id = requests.get('http://127.0.0.1:5000/room_id/'+str(userdata["userid"]))
+    print(get_room_id)
     if get_room_id.status_code == 200:
         get_room_id = get_room_id.json()
         get_users = requests.get('http://127.0.0.1:5000/user-id-from/'+str(get_room_id["room_id"])).json()
@@ -209,7 +234,7 @@ def messaging():
         print(ownerdata)
         return render_template('chatting.html', data = data, displayChat=display_chat, getRoomId=get_room_id)
     else:
-        return render_template('chatting.html', data = data, display_chat=display_chat)
+        return render_template('chatting.html', data = data, displayChat=display_chat)
 
 @socketio.on('joined_room')
 def handle_join_room_event(data):
@@ -246,30 +271,6 @@ def handle_join_room_event(data):
             socketio.emit('join_room', datas, room=data["room"])
         
 
-@app.route('/rent', methods=("POST", "GET"))
-def rent():
-    try:
-        location = session["location"]
-        session.pop('location', None)
-        location_search_address = "http//127.0.0.1:5000/search/" + location
-        location_search_ads = requests.get("http://127.0.0.1:5000/search/" + location)
-        if location_search_ads.status_code == 200:
-            location_searched_ads = location_search_ads.json()["advertisement_list"]
-            print(location_searched_ads[0]['advertisement_id'])
-            photo_link = []
-            for values in location_searched_ads:
-                print(values['advertisement_id'])
-                photo_location = os.path.join('http://127.0.0.1:5000/file/', values["photo"])
-                photo_get = requests.get(photo_location).json()
-                print(photo_get)
-                photo_link.append(photo_get)
-        return render_template("rent.html", location=location, location_searched_ads=location_searched_ads, photo_link=photo_link)
-    except Exception as e:
-        print(e)
-    if request.method == 'POST':
-        session["location"] = request.form["EnterLocation"]
-        return redirect(url_for("rent"))
-    return render_template("rent.html")
 
 if __name__=='__main__':
     app.config['SECRET_KEY'] = 'secrethaiguys'
