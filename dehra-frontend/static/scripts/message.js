@@ -7,10 +7,11 @@ details = {'Location': 'Kathmandu', 'Price': "Rs. 2000 per month","Room Count": 
 var ioConnectStatus = 0;
 var checkElement = document.getElementsByClassName("messages");
 $(document).ready(function(){
-    displayAllAvailableConnectedUsers();
+    document.getElementById("showing-chatting-area").innerHTML="";
     ioConnectStatus = 0;
     if(displayChat){
         connectIO();
+        displayAllAvailableConnectedUsers();
         ioConnectStatus++;
     }
     $(".messages").on('click', function () {
@@ -19,27 +20,46 @@ $(document).ready(function(){
             document.getElementById(checkElement[i].id).style.backgroundColor="#1E1E1E";
             document.getElementById(id).style.backgroundColor="black";
             detailsShowingOwnerRenter(id);
-            displayChat = true;
-            if(ioConnectStatus==0 && displayChat){
-                connectIO();
-                ioConnectStatus++;
-            }
         };
+        connectingToRoom(id);
+        
+        document.getElementById("showing-chatting-area").innerHTML="";
     });
 });
 
 function displayAllAvailableConnectedUsers(){
     if(displayChat){
-        console.log("True");
+        var side_display="";
+        for(i=0; i<actual_data.length;i++){
+            side_display += `<div class="row messages" id="`+ i +`">
+            <i class="fas fa-user user-face"></i>
+            <div class="col">`;
+            for(j=0;j<2;j++){
+                side_display +=`
+                <div class="row">
+                    <div class="col" id="Username-side-display">`;
+                if(j==0){
+                    if(actual_data[i]["owner_name"]!=currentUser)
+                        side_display += actual_data[i]["owner_name"];
+                    else
+                        side_display += actual_data[i]["renter_name"];
+                }else{
+                    side_display += actual_data[i]["message"];
+                }
+                side_display += `</div></div>`;
+            }
+            side_display += `</div></div>`;
+        }
+        document.getElementById("messages-show").innerHTML=side_display;
     }else{
         document.getElementById("messages-show").innerHTML="No Messages";
-        document.getElementById("showing-chatting-area").innerHTML="";
     }
 }
 
 function connectIO(){
     const socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);    // Connecting to socket io to the domain with configured protocol
-    console.log(actual_data);
+}
+function connectingToRoom(i){
     tempValue = { //triggers joined_room event and passes username and room
         username: actual_data['username'], 
         room: parseInt(actual_data['room_no'])

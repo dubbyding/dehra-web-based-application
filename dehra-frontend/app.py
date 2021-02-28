@@ -209,32 +209,47 @@ def messaging():
         chatting_requesting_json = json.dumps(chatting_requesting_json)
         headers = {"Content-Type": "application/json"}
         chatting_room_id = requests.post("http://127.0.0.1:5000/chat_id", data=chatting_requesting_json, headers=headers)
-        if chatting_room_id.status_code == 200:
+        if not chatting_room_id.status_code == 200:
             room_no = chatting_room_id.json()["chat_user_id"]
             data = {
                 "username": session["username"],
                 "room_no": room_no
             }
             data = json.dumps(data)
-            display_chat=True
-    else:
-        display_chat=False
-        data={
-            "username": session["username"]
-        }
     userdata = requests.get('http://127.0.0.1:5000/user-data/' + session['username']).json()
-    get_room_id = requests.get('http://127.0.0.1:5000/room_id/'+str(userdata["userid"]))
-    print(get_room_id)
-    if get_room_id.status_code == 200:
-        get_room_id = get_room_id.json()
-        get_users = requests.get('http://127.0.0.1:5000/user-id-from/'+str(get_room_id["room_id"])).json()
-        print(get_users)
-        ownerdata = requests.get('http://127.0.0.1:5000/user-data-id/' + str(get_users["owner"])).json()
-        renterdata = requests.get('http://127.0.0.1:5000/user-data-id/' + str(get_users["renter"])).json()
-        print(ownerdata)
-        return render_template('chatting.html', data = data, displayChat=display_chat, getRoomId=get_room_id)
+    all_room_id = requests.get('http://127.0.0.1:5000/user-id/' + str(userdata["userid"]))
+    print(all_room_id)
+    if all_room_id.status_code == 200:
+        get_room_id = all_room_id.json()["Message"]
+        print(get_room_id)
+        data=[]
+        for ids in get_room_id:
+            ownerdata = requests.get('http://127.0.0.1:5000/user-data-id/' + str(ids["owner"])).json()
+            renterdata = requests.get('http://127.0.0.1:5000/user-data-id/' + str(ids["renter"])).json()
+            latestMessage = requests.get('http://127.0.0.1:5000/latest_msg/'+ str(ids["room_id"]))
+            if latestMessage.status_code == 200:
+                latestMessage = latestMessage.json()
+                data.append(
+                    {
+                        "owner_name": ownerdata["username"],
+                        "renter_name": renterdata["username"],
+                        "message": latestMessage["latest_message"]
+                    }
+                )
+            else:
+                latestMessage = latestMessage.json()
+                if latestMessage["Message"]=="No Messages":
+                    data.append(
+                        {
+                            "owner_name": ownerdata["username"],
+                            "renter_name": renterdata["username"],
+                            "message": latestMessage["Message"]
+                        }
+                    )
+            print(data)
+        return render_template('chatting.html',data=data, displayChat=True, getRoomId=get_room_id)
     else:
-        return render_template('chatting.html', data = data, displayChat=display_chat)
+        return render_template('chatting.html',data=data, displayChat=False)
 
 @socketio.on('joined_room')
 def handle_join_room_event(data):

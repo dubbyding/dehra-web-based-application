@@ -104,6 +104,14 @@ class ChatUserModel(db.Model):
         return cls.query.filter_by(owner_id=owner_id, renter_id=renter_id).first().id
     
     @classmethod
+    def get_id_by_owner(cls, owner_id: int):
+        return cls.query.filter_by(owner_id=owner_id).all()
+    
+    @classmethod
+    def get_id_by_renter(cls, id: int):
+        return cls.query.filter_by(renter_id=id).all()
+    
+    @classmethod
     def get_users(cls, id):
         return cls.query.filter_by(id=id).first()
 

@@ -76,11 +76,9 @@
             </div>
         </div>
         <script>
-
             var data = `{{ data|safe }}`;      
             if(data !== ""){
                 data_data = data.replaceAll(/\[|\]/g,"").replaceAll(/}, {/g, "} , {").split(' , ');
-                console.log(data_data);
                 actual_data = [];
                 for(var i = 0; i<data_data.length; i++){
                     each_detail = data_data[i].replaceAll(/}|{/g,"").split(", ");
@@ -89,17 +87,31 @@
                         single_values = each_detail[j].replaceAll(/'/g,"").split(": ");
                         single_ads[single_values[0].replaceAll(/"/g,"")] = single_values[1].replaceAll(/"/g,"");
                     }
-                    console.log(single_ads);
-                    actual_data =  single_ads;
+                    actual_data.push(single_ads);
                 }
             }
-            console.log(actual_data['username']);
+            console.log(actual_data);
+
+            currentUser = "{{ session['username'] }}";
+
             var displayChat = "{{ displayChat }}";
-            displayChat = (displayChat==="true");
-            console.log(displayChat);
+            displayChat = (displayChat==="True");
             
             roomId = `{{ getRoomId|safe }}`;
-            console.log(roomId);
+            if(roomId !== ""){
+                room_id = roomId.replaceAll(/\[|\]/g,"").replaceAll(/}, {/g, "} , {").split(' , ');
+                roomId = [];
+                for(var i = 0; i<room_id.length; i++){
+                    single_id = room_id[i].replaceAll(/}|{/g,"").split(", ");
+                    single_id_collection = [];
+                    for(var j =0; j<single_id.length;j++){
+                        single_id_values = single_id[j].replaceAll(/'/g,"").split(": ");
+                        single_id_collection[single_id_values[0].replaceAll(/"/g,"")] = single_id_values[1].replaceAll(/"/g,"");
+                    }
+                    roomId.push(single_id_collection);
+                }
+            }
+            console.log(roomId[0]["room_id"]);
         </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
 {% endblock %}

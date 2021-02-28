@@ -19,6 +19,7 @@ from advertisement_management.resources.advertisement import (
     GetSingleAdvertisement,
     GetAdvertisementListsByUserId,
     PostChatId,
+    GetChatId,
     ChatMessage,
     ChatMessageAll,
     ChatLatestMessage,
@@ -61,6 +62,7 @@ api.add_resource(GetAdvertisementListsByUserId, "/advertisement/user/<int:user_i
 
 api.add_resource(getUsersByRoomId,"/user-id-from/<int:room_id>")
 api.add_resource(PostChatId, "/chat_id")
+api.add_resource(GetChatId,"/user-id/<int:id>")
 api.add_resource(ChatMessage, "/message")
 api.add_resource(getMessageAll, "/getMessage/<int:room_id>")
 api.add_resource(ChatMessageAll, "/room_id/<int:user_id>")

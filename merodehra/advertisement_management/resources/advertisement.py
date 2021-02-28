@@ -2,6 +2,7 @@ from flask_restful import Resource
 from flask import request, send_file
 import json, os, datetime, shutil
 import dropbox
+from flask_sqlalchemy.utils import engine_config_warning
 from werkzeug.utils import secure_filename
 from advertisement_management.models.advertisement import AdvertisementModel, ChatMessageModel, ChatUserModel
 from advertisement_management.schemas.advertisement import (
@@ -221,7 +222,7 @@ class PostChatId(Resource):
         chat_id_data = chat_user_schema.load(chat_id_json)
         if ChatUserModel.find_owner_id(chat_id_data["owner_id"]) and ChatUserModel.find_renter_id(
                 chat_id_data["renter_id"]):
-            user_id = ChatUserModel.get_id(chat_id_data["owner_id"], chat_id_data["renter_id"])
+            user_id = ChatUserModel.get_room_id(chat_id_data["owner_id"], chat_id_data["renter_id"])
             return {"chat_user_id": user_id}, 200
         else:
             chat_id = ChatUserModel(
@@ -231,13 +232,46 @@ class PostChatId(Resource):
             chat_id.save_to_db()
             if ChatUserModel.find_owner_id(chat_id_data["owner_id"]) and ChatUserModel.find_renter_id(
                 chat_id_data["renter_id"]):
-                user_id = ChatUserModel.get_id(chat_id_data["owner_id"], chat_id_data["renter_id"])
+                user_id = ChatUserModel.get_room_id(chat_id_data["owner_id"], chat_id_data["renter_id"])
                 return {"chat_user_id": user_id}, 200
+        return{"chat_user_id": None}, 404
+
+class GetChatId(Resource):
+    @classmethod
+    def get(cls, id):
+        details = []
+        try:
+            for i in ChatUserModel.get_id_by_owner(id):
+                details.append(
+                    {
+                        "room_id":i.id,
+                        "owner":i.owner_id,
+                        "renter": i.renter_id
+                    }
+                )
+        except:
+            pass
+        try:
+            for i in ChatUserModel.get_id_by_renter(id):
+                details.append(
+                    {
+                        "room_id":i.id,
+                        "owner":i.owner_id,
+                        "renter": i.renter_id
+                    }
+                )
+        except:
+            pass
+        if not details:
+            return {"Message": "No chatting data"}, 404
+        print(details)
+        return {"Message": details}, 200
 
 class getUsersByRoomId(Resource):
     @classmethod
     def get(cls, room_id):
         get_datas = ChatUserModel.get_users(room_id)
+        print(get_datas)
         return {
             "owner": get_datas.owner_id,
             "renter": get_datas.renter_id
@@ -287,7 +321,7 @@ class ChatMessageAll(Resource):
 class ChatLatestMessage(Resource):
     @classmethod
     def get(cls, room_id):
-        if ChatMessageModel.query.all() is None:
+        try:
             if room_id:
                 latest_message = ChatMessageModel.get_latest_msg(room_id)
                 print(latest_message)
@@ -296,5 +330,7 @@ class ChatLatestMessage(Resource):
                 }]
                 # print(msg)
                 return msg, 200
-        else:
-            return {"message": "Sorry, Database is empty!!!"}, 404
+            else:
+                return {"Message": "No Messages"}, 404
+        except AttributeError:
+            return {"Message": "No Messages"}, 404
