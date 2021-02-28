@@ -100,7 +100,7 @@ class ChatUserModel(db.Model):
         return cls.query.filter_by(renter_id=renter_id).first()
 
     @classmethod
-    def get_id(cls, owner_id, renter_id):
+    def get_room_id(cls, owner_id, renter_id):
         return cls.query.filter_by(owner_id=owner_id, renter_id=renter_id).first().id
     
     @classmethod
