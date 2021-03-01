@@ -253,7 +253,8 @@ def handle_join_room_event(data):
         for i in item:
             user_id, message = [value for key, value in i.items()]
             user_id_list.append(user_id)
-            message_list.append(message)
+            message_list.append([user_id,message])
+        print(message_list)
         for_usernames = list(set(user_id_list))
         usernames=[]
         username_dicts={}
@@ -263,18 +264,15 @@ def handle_join_room_event(data):
             usernames.append(user["username"])
         for i, names in enumerate(usernames):
             username_dicts[for_usernames[i]] = names
-        messages_dict={}
-        for i, messages in enumerate(message_list):
-            messages_dict[user_id_list[i]] = messages
-        print(messages_dict)
+        print(username_dicts)
         datas = {
             "Username": username_dicts,
-            "Message": messages_dict
+            "Message": message_list
         }
         join_room(data['room'])
 
         if value is not None:
-            socketio.emit('join_room', datas, room=data["room"])
+            socketio.emit('join_room', datas, room=data["room"], broadcast=False, include_self=True)
         
 @socketio.on('send_message')
 def handle_send_messsage_event(data):

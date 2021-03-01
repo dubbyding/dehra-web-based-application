@@ -66,7 +66,7 @@ function displayAllAvailableConnectedUsers(){
                     
                     side_display +=`
                     <div class="col" id="message-side-display-`+ i +`">`;
-                    side_display += actual_data[i]["message"];
+                    side_display += actual_data[i]["message"].substring(0,20)+"...";
                 }
                 side_display += `</div></div>`;
             }
@@ -85,6 +85,8 @@ function connectIO(i){
     }else{
         username_to_send = actual_data[i]["renter_name"];
     }
+    
+    count = 0;
     console.log(roomId[i]["room_id"]);
     document.getElementById("messages").innerHTML="";
     socket.on('connect', function (){   // When connected run this function
@@ -97,13 +99,14 @@ function connectIO(i){
         // previous messages restored
         message = datas["Message"];
         username = datas["Username"];
-        count = 0;
-
-        for (var key of Object.keys(message)){
-            console.log(username[key]+"->"+message[key]);
-            const newNode = document.createElement('div');
-            newNode.innerHTML = `<b>${username[key]}: &nbsp;</b> ${message[key]}`;
-            document.getElementById("messages").appendChild(newNode);
+        if(count==0){
+            for (var i = message.length-1; i>=0 ; i--){
+                console.log(username[message[i][0]]+"->"+message[i][1]);
+                count++;
+                const newNode = document.createElement('div');
+                newNode.innerHTML = `<b>${username[message[i][0]]}: &nbsp;</b> ${message[i][1]}`;
+                document.getElementById("messages").appendChild(newNode);
+            }
         }
         updateScroll();
     });
@@ -129,7 +132,7 @@ function connectIO(i){
     socket.on('recieve_message', function (data){   // Frontend recieve_message envoked
         // Inserts new message
         console.log("message-side-display-"+i);
-        document.getElementById("message-side-display-"+i).innerHTML = data.message.substring(0,15);
+        document.getElementById("message-side-display-"+i).innerHTML = data.message.substring(0,15)+"...";
         const newNode = document.createElement('div');
         newNode.innerHTML = `<b>${data.username}: &nbsp;</b> ${data.message}`;
         document.getElementById("messages").appendChild(newNode);
