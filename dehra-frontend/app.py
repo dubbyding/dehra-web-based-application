@@ -91,6 +91,7 @@ def signup():
         if signupRequest.status_code == 200:
             session['username'] = username
             session['password'] = password
+            session["rememberme"] = "on"
             return redirect(url_for('index'))
         else:
             error = signupRequest.json()
@@ -121,9 +122,13 @@ def rent():
 
 @app.route('/logout')
 def logout():
-    if session["rememberme"] == "on":
-        session.pop("password", None)
-    else:
+    try:
+        if session["rememberme"] == "on":
+            session.pop("password", None)
+        else:
+            session.pop('username', None)
+            session.pop("password", None)
+    except:
         session.pop('username', None)
         session.pop("password", None)
     return redirect(url_for('login'))
@@ -139,6 +144,36 @@ def profile_check():
         photo_location = os.path.join('http://127.0.0.1:5000/file/', values["photo"])
         photo_get = requests.get(photo_location).json()
         photo_link.append(photo_get)
+    userdata = requests.get('http://127.0.0.1:5000/user-data/' + session['username']).json()
+    all_room_id = requests.get('http://127.0.0.1:5000/user-id/' + str(userdata["userid"]))
+    if all_room_id.status_code == 200:
+        get_room_id = all_room_id.json()["Message"]
+        data=[]
+        for ids in get_room_id:
+            ownerdata = requests.get('http://127.0.0.1:5000/user-data-id/' + str(ids["owner"])).json()
+            renterdata = requests.get('http://127.0.0.1:5000/user-data-id/' + str(ids["renter"])).json()
+            latestMessage = requests.get('http://127.0.0.1:5000/latest_msg/'+ str(ids["room_id"]))
+            if ownerdata["username"] != session["username"]:
+                display_username = ownerdata["username"]
+            else:
+                display_username = renterdata["username"]
+            if latestMessage.status_code == 200:
+                latestMessage = latestMessage.json()
+                data.append(
+                    {
+                        "username": display_username,
+                        "message": latestMessage[0]["latest_message"]
+                    }
+                )
+            else:
+                latestMessage = latestMessage.json()
+                if latestMessage["Message"]=="No Messages":
+                    data.append(
+                        {
+                            "username": display_username,
+                            "message": latestMessage["Message"]
+                        }
+                    )
     if request.method == "POST":
         try:
             username = request.form["Username"]
@@ -181,7 +216,7 @@ def profile_check():
             sendAdsData = requests.post('http://127.0.0.1:5000/advertisement', data = datas, files=photo)
             if(sendAdsData.status_code == 200):
                 return redirect(url_for('profile_check'))
-    return render_template('profile.html', user_ads_data=user_ads_data["advertisement_list"], photo_link=photo_link)
+    return render_template('profile.html', user_ads_data=user_ads_data["advertisement_list"], photo_link=photo_link, data=data)
 
 @app.route('/chatting', methods=("POST","GET"))
 def messaging():
@@ -200,16 +235,12 @@ def messaging():
             "owner_id": ownerdata["userid"],
             "renter_id": renterdata["userid"]
         }
+        print(chatting_requesting_json)
         chatting_requesting_json = json.dumps(chatting_requesting_json)
         headers = {"Content-Type": "application/json"}
         chatting_room_id = requests.post("http://127.0.0.1:5000/chat_id", data=chatting_requesting_json, headers=headers)
         if not chatting_room_id.status_code == 200:
-            room_no = chatting_room_id.json()["chat_user_id"]
-            data = {
-                "username": session["username"],
-                "room_no": room_no
-            }
-            data = json.dumps(data)
+            print("error")
     userdata = requests.get('http://127.0.0.1:5000/user-data/' + session['username']).json()
     all_room_id = requests.get('http://127.0.0.1:5000/user-id/' + str(userdata["userid"]))
     if all_room_id.status_code == 200:

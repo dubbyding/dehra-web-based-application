@@ -16,14 +16,18 @@ $(".for-profile-details").on('click', function(){
     document.getElementById("addingAdvertisement").style.display = "none";
     if(id == 'contacted-people'){
         var counter = 0;
-        var capable = Math.ceil(contacted.length/8);
+        var capable = Math.ceil(actual_data.length/8);
         counter = addContactedPeopleOnProfile(counter, capable, counterNeed = 1);   // 1 repesentes forward and -1 represents backward
     }
     if(id == 'add-advertisement'){
         var advertisement_counter = 0;
         var capable = Math.ceil(actual_advertisement.length/4);
-        advertisement_counter = addadvertisementOfPeople(advertisement_counter, capable, counterNeed=1);
-    }
+        console.log(actual_advertisement);
+        console.log(typeof(actual_advertisement[0]) != "undefined");
+        if(typeof(actual_advertisement[0]) != "undefined")
+
+            advertisement_counter = addadvertisementOfPeople(advertisement_counter, capable, counterNeed=1);
+        }
 });
 function requestLocationByGeo(Latitude=27.6791296, Longitude=85.32459519999999){
     var xhr = new XMLHttpRequest();
@@ -179,22 +183,22 @@ function addContactedPeopleOnProfile(counter, capable, counterNeed, button = 0){
     
     buttons_adding = document.getElementById('buttons-below');
     buttons_adding.innerHTML = buttonAdding;
-    if(contacted.length<8){
-        var display = contacted.length-(8*(counter-1));
+    if(actual_data.length<8){
+        var display = actual_data.length-(8*(counter-1));
     }else{
         var display = counter;
     }
     for(var i = 8*(counter-1); i< display; i++){
-        console.log(contacted.length);
+        console.log(actual_data.length);
         if(column > 1){
             column = 0;
             addingPeople = addingPeople + `</div>`
         }else if(column == 0){
             addingPeople = addingPeople + `<div class="row contacted-people-show">`;
         }
-        addingPeople = addingPeople + `<div class="col d-flex display-contacted-people-onclick align-items-center" id="displayingContactedPeople`+ contacted[i] +`">
+        addingPeople = addingPeople + `<div class="col d-flex display-contacted-people-onclick align-items-center" id="displayingContactedPeople`+ actual_data[i][username] +`">
                 <i class="fas fa-user user-face"></i>
-                <span id="username-chatting">` + contacted[i] + `</span>
+                <span id="username-chatting">` + actual_data[i]["username"] + `</span>
         </div>`;
         column++;
     }

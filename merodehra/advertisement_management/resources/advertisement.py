@@ -220,11 +220,12 @@ class PostChatId(Resource):
         chat_id_json = request.get_json()
         print(chat_id_json)
         chat_id_data = chat_user_schema.load(chat_id_json)
-        if ChatUserModel.find_owner_id(chat_id_data["owner_id"]) and ChatUserModel.find_renter_id(
-                chat_id_data["renter_id"]):
-            user_id = ChatUserModel.get_room_id(chat_id_data["owner_id"], chat_id_data["renter_id"])
-            return {"chat_user_id": user_id}, 200
-        else:
+        try:
+            if ChatUserModel.find_owner_id(chat_id_data["owner_id"]) and ChatUserModel.find_renter_id(
+                    chat_id_data["renter_id"]):
+                user_id = ChatUserModel.get_room_id(chat_id_data["owner_id"], chat_id_data["renter_id"])
+                return {"chat_user_id": user_id}, 200
+        except:
             chat_id = ChatUserModel(
                 chat_id_data["owner_id"],
                 chat_id_data["renter_id"],
