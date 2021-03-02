@@ -47,8 +47,8 @@ function displayAdsLatest(advertisement_putting, counter, capable, counterNeed){
         display = advertisement_putting.length;
     }
     addAds = addAds + `<div class = "col aligning-center justify-content-center">
-                    <i class="fas fa-chevron-left"></i>
-                </div>`;
+        <button type="button" class="btn btn-primary btn-sm" onclick="displayAdsLatest(`+advertisement_putting+counter+`,`+ capable +`,-1)"><i class="fas fa-chevron-left"></i></button>
+        </div>`;
     for(var i = 4*(counter-1); i< display; i++){
         addAds = addAds + `<div class = "col-2 advertisement-image-putting" id="`+advertisement_putting[i]["advertisement_id"]+`-ad-new-img" data-toggle="modal" data-target="#myModal">
                 <p class="details text-wrap justify-content-center" id="`+advertisement_putting[i]["advertisement_id"]+`-ad-new-details">
@@ -58,7 +58,7 @@ function displayAdsLatest(advertisement_putting, counter, capable, counterNeed){
             </div>`
     }
     addAds = addAds + `<div class = "col aligning-center justify-content-center">
-        <i class="fas fa-chevron-right"></i>
+        <button type="button" class="btn btn-primary btn-sm" onclick=" displayAdsLatest(`+advertisement_putting+counter+`,`+ capable +`,1)"><i class="fas fa-chevron-right"></i></button>
     </div>`;
     document.getElementById("new-cities-loading").innerHTML = addAds;
     for(var i = 4*(counter-1); i< display; i++){
@@ -89,12 +89,11 @@ function displayAds(new_actual_advertisement, counter, capable, counterNeed){
         initial_index++;
     });
     addAds = addAds + `<div class = "col aligning-center justify-content-center">
-                    <i class="fas fa-chevron-left"></i>
-                </div>`;
+    <button type="button" class="btn btn-primary btn-sm" onclick="displayAds(`+new_actual_advertisement+counter+`,`+ capable +`,-1)"><i class="fas fa-chevron-left"></i></button>
+    </div>`;
     shuffle_index = shuffle(counter_array);
     for(var i = 4*(counter-1); i< display; i++){
         index = shuffle_index[i];
-        console.log(new_actual_advertisement[index]);
         addAds = addAds + `<div class = "col-2 advertisement-image-putting" id="`+new_actual_advertisement[index]["advertisement_id"]+`-ad-img" data-toggle="modal" data-target="#myModal">
                 <p class="details text-wrap justify-content-center" id="`+new_actual_advertisement[index]["advertisement_id"]+`-ad-details">
                     Location:- `+ new_actual_advertisement[index]["property_address"].split(",")[0] +`<br>

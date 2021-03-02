@@ -221,6 +221,7 @@ def profile_check():
 @app.route('/chatting', methods=("POST","GET"))
 def messaging():
     data = None
+    new = False
     try:
         if session["username"] and session["password"]:
             pass
@@ -239,10 +240,13 @@ def messaging():
         chatting_requesting_json = json.dumps(chatting_requesting_json)
         headers = {"Content-Type": "application/json"}
         chatting_room_id = requests.post("http://127.0.0.1:5000/chat_id", data=chatting_requesting_json, headers=headers)
-        if not chatting_room_id.status_code == 200:
+        if chatting_room_id.status_code == 404:
             print("error")
+        else:
+            new = True
     userdata = requests.get('http://127.0.0.1:5000/user-data/' + session['username']).json()
     all_room_id = requests.get('http://127.0.0.1:5000/user-id/' + str(userdata["userid"]))
+    print(all_room_id.status_code)
     if all_room_id.status_code == 200:
         get_room_id = all_room_id.json()["Message"]
         data=[]
@@ -303,7 +307,7 @@ def handle_join_room_event(data):
         join_room(data['room'])
 
         if value is not None:
-            socketio.emit('join_room', datas, room=data["room"], broadcast=False, include_self=True)
+            socketio.emit('join_room', datas, room=data["room"])
         
 @socketio.on('send_message')
 def handle_send_messsage_event(data):

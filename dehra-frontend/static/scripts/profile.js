@@ -22,11 +22,13 @@ $(".for-profile-details").on('click', function(){
     if(id == 'add-advertisement'){
         var advertisement_counter = 0;
         var capable = Math.ceil(actual_advertisement.length/4);
-        console.log(actual_advertisement);
-        console.log(typeof(actual_advertisement[0]) != "undefined");
-        if(typeof(actual_advertisement[0]) != "undefined")
+        console.log(actual_advertisement[0][""]);
+        console.log(typeof(actual_advertisement[0][""]) != "undefined");
+        if(typeof(actual_advertisement[0][""]) != "undefined")
 
             advertisement_counter = addadvertisementOfPeople(advertisement_counter, capable, counterNeed=1);
+        }else{
+            document.getElementById("adding-advertisement").innerHTML="You have added no Advertisement!";
         }
 });
 function requestLocationByGeo(Latitude=27.6791296, Longitude=85.32459519999999){
@@ -193,10 +195,11 @@ function addContactedPeopleOnProfile(counter, capable, counterNeed, button = 0){
         if(column > 1){
             column = 0;
             addingPeople = addingPeople + `</div>`
-        }else if(column == 0){
+        }
+        if(column == 0){
             addingPeople = addingPeople + `<div class="row contacted-people-show">`;
         }
-        addingPeople = addingPeople + `<div class="col d-flex display-contacted-people-onclick align-items-center" id="displayingContactedPeople`+ actual_data[i][username] +`">
+        addingPeople = addingPeople + `<div class="col d-flex display-contacted-people-onclick align-items-center" id="displayingContactedPeople`+ actual_data[i]["username"] +`">
                 <i class="fas fa-user user-face"></i>
                 <span id="username-chatting">` + actual_data[i]["username"] + `</span>
         </div>`;

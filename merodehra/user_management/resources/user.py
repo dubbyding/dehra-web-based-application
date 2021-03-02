@@ -54,7 +54,6 @@ class UserAllData(Resource):
     @classmethod
     def get(cls, username_recieve):
         user = UserModel.find_by_username(username_recieve)
-        print(user)
         return {
             "userid": user.id,
             "username": username_recieve,
