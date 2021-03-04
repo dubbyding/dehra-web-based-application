@@ -6,6 +6,7 @@ from user_management.resources.user import (
     UserSignUp,
     UserLogin,
     UserAllData,
+    UserContactInfo,
     UserPasswordChange,
     UserEmailChange,
     UserMobileNumberChange,
@@ -47,6 +48,7 @@ def create_tables():
 api.add_resource(UserSignUp, "/signup")
 api.add_resource(UserLogin, "/login")
 api.add_resource(UserAllData,"/user-data/<string:username_recieve>")
+api.add_resource(UserContactInfo,"/user-contact-info/<string:username_recieve>")
 api.add_resource(UserAllDataById,"/user-data-id/<int:id>")
 api.add_resource(UserPasswordChange, "/change-password")
 api.add_resource(UserEmailChange, "/change-email")

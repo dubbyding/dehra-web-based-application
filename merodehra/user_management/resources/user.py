@@ -60,6 +60,17 @@ class UserAllData(Resource):
             "email": user.email
         }, 200
 
+class UserContactInfo(Resource):
+    @classmethod
+    def get(cls, username_recieve):
+        user = UserModel.find_by_username(username_recieve)
+        return {
+            "userid": user.id,
+            "username": username_recieve,
+            "email": user.email,
+            "phone": user.mobile_number
+        }, 200
+
 class UserAllDataById(Resource):
     @classmethod
     def get(cls, id):

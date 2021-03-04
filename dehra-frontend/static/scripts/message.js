@@ -6,7 +6,6 @@ connected_status = false
 var connected_id = null;
 var checkElement = document.getElementsByClassName("messages");
 $(document).ready(function(){
-    console.log(checkElement[0].id);
     document.getElementById("user-face-showing").style.display="none";
     displayAllAvailableConnectedUsers();
     $(".messages").on('click', function () {
@@ -38,7 +37,6 @@ $(document).ready(function(){
 function displayChattingArea(id){
     if(actual_data[id]["owner_name"] != currentUser){
         username_to_display = actual_data[id]["owner_name"];
-        console.log(username_to_display);
     }else{
         username_to_display = actual_data[id]["renter_name"];;
     }
@@ -46,6 +44,7 @@ function displayChattingArea(id){
     document.getElementById("username-chatting").innerHTML=username_to_display;
 }
 function displayAllAvailableConnectedUsers(){
+    document.getElementById("messages-show").innerHTML="No Messages";
     if(displayChat){
         var side_display="";
         for(i=0; i<actual_data.length;i++){
@@ -73,8 +72,6 @@ function displayAllAvailableConnectedUsers(){
             side_display += `</div></div>`;
         }
         document.getElementById("messages-show").innerHTML=side_display;
-    }else{
-        document.getElementById("messages-show").innerHTML="No Messages";
     }
 }
 
@@ -87,7 +84,6 @@ function connectIO(i){
     }
     
     count = 0;
-    console.log(roomId[i]["room_id"]);
     document.getElementById("messages").innerHTML="";
     socket.on('connect', function (){   // When connected run this function
         socket.emit('joined_room',{ //triggers joined_room event and passes username and room
@@ -101,7 +97,6 @@ function connectIO(i){
         username = datas["Username"];
         if(count==0){
             for (var i = message.length-1; i>=0 ; i--){
-                console.log(username[message[i][0]]+"->"+message[i][1]);
                 count++;
                 const newNode = document.createElement('div');
                 newNode.innerHTML = `<b>${username[message[i][0]]}: &nbsp;</b> ${message[i][1]}`;
@@ -131,74 +126,11 @@ function connectIO(i){
     }
     socket.on('recieve_message', function (data){   // Frontend recieve_message envoked
         // Inserts new message
-        console.log("message-side-display-"+i);
+        var message_side_display_element = !!document.getElementById("message-side-display-"+i);
+        if(!message_side_display_element){
+            console.log("No exists");
+        }
         document.getElementById("message-side-display-"+i).innerHTML = data.message.substring(0,15)+"...";
-        const newNode = document.createElement('div');
-        newNode.innerHTML = `<b>${data.username}: &nbsp;</b> ${data.message}`;
-        document.getElementById("messages").appendChild(newNode);
-        updateScroll();
-
-    });
-}
-function connectingToRoom(i){
-    if(actual_data[i]["owner_name"] == currentUser){
-        username_to_send = currentUser;
-    }else{
-        username_to_send = actual_data[i]["renter_name"];
-    }
-    tempValue = { //triggers joined_room event and passes username and room
-        username: username_to_send, 
-        room: parseInt(roomId[i]["room_id"])
-    }
-
-    socket.on('connect', function (){   // When connected run this function
-        socket.emit('joined_room',{ //triggers joined_room event and passes username and room
-            username: username_to_send, 
-            room: roomId[i]["room_id"]
-        });
-    });
-    socket.on('join_room', function (datas){ // Frontend rejoin_room envoked
-        // previous messages restored
-        message = datas["Message"];
-        username = datas["Username"];
-        count = 0;
-
-        for (var key of Object.keys(message)){
-            console.log(username[key]+"->"+message[key]);
-            const newNode = document.createElement('div');
-            newNode.innerHTML = `<b>${username[key]}: &nbsp;</b> ${message[key]}`;
-            document.getElementById("messages").appendChild(newNode);
-        }
-        updateScroll();
-    });
-    document.getElementById("message_input_form").onsubmit = function (e) {
-        e.preventDefault();
-        let message = document.getElementById("message_input").value.trim();
-        if(actual_data[i]["owner_name"] == currentUser){
-            user_id_to_send = roomId[i]["owner"];
-        }else{
-            user_id_to_send = roomId[i]["renter"];;
-        }
-        if(message.length){
-            socket.emit('send_message',{
-                username: user_id_to_send,
-                room: roomId[i]["room_id"],
-                message: message
-            })
-        }
-        
-        document.getElementById("message_input").value = "";   // Clear the input
-        document.getElementById("message_input").focus();  // Put the input box to focus for typing again
-    }
-    socket.on('recieve_message', function (data){   // Frontend recieve_message envoked
-        // Inserts new message
-        console.log(data);
-        if(roomId[i]["owner"] == data.username){
-            displayusername = actual_data[i]["owner_name"]
-        }else{
-            displayusername = actual_data[i]["renter_name"]
-        }
-        
         const newNode = document.createElement('div');
         newNode.innerHTML = `<b>${data.username}: &nbsp;</b> ${data.message}`;
         document.getElementById("messages").appendChild(newNode);
@@ -213,12 +145,19 @@ function updateScroll(){
     element.scrollTop = element.scrollHeight;
 }
 function detailsShowingOwnerRenter(i){
+    var owner_status = 0;
+    if(actual_data[i]["owner_name"] == currentUser){
+        username_to_send = actual_data[i]["owner_name"];
+        owner_status = 1;
+    }else{
+        username_to_send = actual_data[i]["renter_name"];
+    }
     var showDetails = document.getElementById('details-for-texting');
     showDetails.innerHTML="";
     showDetails.classList.remove("justify-content-center");
     const newNode = document.createElement('div');
     newNode.classList.add("row");
-    if(i=='message-1'){
+    if(owner_status == 0){
         newNode.innerHTML = `<div class="col align-items-center">
         <p>
         <b>Location</b>: `+details['Location']+`

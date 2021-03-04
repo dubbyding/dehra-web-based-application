@@ -326,5 +326,5 @@ def handle_send_messsage_event(data):
     socketio.emit('recieve_message', data, room=data['room'])
 
 if __name__=='__main__':
-    app.config['SECRET_KEY'] = 'secrethaiguys'
+    app.config['SECRET_KEY'] = '\x15\r\x19\x19\xad\x042\x1a]r\xb5\xb0\x14\xa8\x87\xe2\xa2\xb9\x14\n\x0fgn\xe5'
     app.run(port=5001, debug=True)  
