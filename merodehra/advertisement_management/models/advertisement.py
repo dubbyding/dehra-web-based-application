@@ -66,6 +66,10 @@ class AdvertisementModel(db.Model):
         return cls.query.filter_by(user_id=user_id).all()
 
     @classmethod
+    def find_geo_location(cls, id: int):
+        return cls.query.filter(AdvertisementModel.id == id).first().geo_location
+
+    @classmethod
     def get_advertisement_lists_by_location(cls, location_to_search: str) -> list:
         location_to_search_string = "%{}%".format(location_to_search)
         return cls.query.filter(

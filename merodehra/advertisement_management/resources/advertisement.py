@@ -104,6 +104,16 @@ class PostAdvertisement(Resource):
         )
         return {"message": "Advertisement Successfully added"}, 200
 
+class getGeoLocation(Resource):
+    @classmethod
+    def get(cls, id):
+        geoLocation = AdvertisementModel.find_geo_location(id)
+        latitude, longitude = geoLocation.split(", ")
+        return {
+            "latitude": latitude,
+            "longitude": longitude
+        }
+
 class getAllAdsData(Resource):
     @classmethod
     def get(cls, number_needed):

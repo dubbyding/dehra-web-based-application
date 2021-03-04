@@ -8,6 +8,8 @@ socketio = SocketIO(app)
 
 @app.route('/', methods=('GET','POST'))
 def index():
+    trying = requests.get("http://127.0.0.1:5000/advertisement/1")
+    print(trying.status_code)
     latest_uploaded = requests.get("http://127.0.0.1:5000/advertisement/data/12")
     if latest_uploaded.status_code == 200:
         value = latest_uploaded.json()['advertisement_list']

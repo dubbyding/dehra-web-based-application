@@ -19,6 +19,7 @@ from advertisement_management.resources.advertisement import (
     GetFile,
     GetSingleAdvertisement,
     GetAdvertisementListsByUserId,
+    getGeoLocation,
     PostChatId,
     GetChatId,
     ChatMessage,
@@ -59,6 +60,7 @@ api.add_resource(PostAdvertisement, "/advertisement")
 api.add_resource(GetAdvertisementLists, "/search/<string:location_to_search>")
 api.add_resource(getAllAdsData,"/advertisement/data/<int:number_needed>")
 api.add_resource(GetFile,"/file/<string:file_name>")
+api.add_resource(getGeoLocation,"/getGeoLocation/<int:id>")
 api.add_resource(GetSingleAdvertisement, "/advertisement/<int:advertisement_id>")
 api.add_resource(GetAdvertisementListsByUserId, "/advertisement/user/<int:user_id>")
 

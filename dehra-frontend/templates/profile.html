@@ -47,13 +47,13 @@
                                 <div class="col">Username: <input class="form-control" name="Username" value="{{ session['username'] }}" type="text" placeholder="Username" id="username"></div>
                             </div>
                             <div class="row my-account-features">
-                                <div class="col">Email: <input class="form-control" name="Email" value="{{ email }}" type="email" placeholder="Email Id" id="email"></div>
+                                <div class="col">Email: <input class="form-control" name="Email" value="{{ email }}" type="email" autocomplete="off" placeholder="Email Id" id="email"></div>
                             </div>
                             <div class="row my-account-features">
                                 <div class="col">
                                     <label for="Enter Password">Enter Password</label>
                                     <div class="input-group">
-                                        <input type="password" class="form-control enterPassword" name="password" id="enterPassword" placeholder="Enter Password" aria-label="Enter Password" aria-describedby="password-show">
+                                        <input type="password" autocomplete="off" class="form-control enterPassword" name="password" id="enterPassword" placeholder="Enter Password" aria-label="Enter Password" aria-describedby="password-show">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-secondary enterPassword" type="button" id="password-show" onclick="showPassword(this)"><i class="far fa-eye"></i></button>
                                         </div>
