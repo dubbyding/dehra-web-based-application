@@ -153,7 +153,7 @@ function detailsShowingOwnerRenter(all_info_data){
     var owner_status = all_info_data["data"]["owner_status"]
     if(owner_status == 0){
         var details = all_info_data;
-        displayAllAdvertisementByOwner(details["advertisement_list"], details["photo_link"]);
+        displayAllAdvertisementByOwner(all_info_data["data"]["owner_status"], details["advertisement_list"], details["photo_link"]);
     }
     else{
         displaySendingData(all_info_data);
@@ -185,9 +185,8 @@ function displaySendingData(all_info_data){
         }
     });
 }
-function displayDetails(i, adDetail, photo_link){
+function displayDetails(i, adDetail, photo_link, owner_status){
     details = adDetail[i];
-    console.log(details);
     var showDetails = document.getElementById('details-for-texting');
     showDetails.innerHTML="";
     showDetails.classList.remove("justify-content-center");
@@ -228,10 +227,10 @@ function displayDetails(i, adDetail, photo_link){
         </div>`;
     showDetails.appendChild(newNode);
     $("#Going-Back").on("click",function(){
-        displayAllAdvertisementByOwner(adDetail, photo_link);
+        displayAllAdvertisementByOwner(owner_status, adDetail, photo_link);
     });
 }
-function displayAllAdvertisementByOwner(adDetail, photo_link){
+function displayAllAdvertisementByOwner(owner_status, adDetail, photo_link){
     var showDetails = document.getElementById('details-for-texting');
 
     allAdvertisementDisplay = `<div class="container">`;
@@ -246,7 +245,26 @@ function displayAllAdvertisementByOwner(adDetail, photo_link){
     showDetails.innerHTML= allAdvertisementDisplay;
     $(".chat-ads-display").on('click', function () {
         id=String($(this).attr('id'));
-        
-        displayDetails(id, adDetail, photo_link);
+        if(owner_status==0){
+            displayDetails(id, adDetail, photo_link, owner_status);
+        }
+    });
+}
+function displayAllAdvertisementToSendDetails(all_info_data, adDetail, photo_link){
+    var showDetails = document.getElementById('details-for-texting');
+
+    allAdvertisementDisplay = `<div class="container">`;
+    for(var i = 0; i< adDetail.length; i++){
+        allAdvertisementDisplay += `<div class="row contacted-people-show chat-ads-display" id = "`+i+`">`;
+        allAdvertisementDisplay += `<div class="col-6 d-flex display-contacted-people-onclick align-items-center" id="displayingAdvertisement`+ adDetail[i]["advertisement_id"]+`">
+        <img src="`+photo_link[i]+`" width=100px height=100px style="margin-left:5px; border-radius:10px;">
+        <span id="location-name">Type:- `+adDetail[i]["property_type"]+`<br> Location:- `+ adDetail[i]["property_address"].split(',')[0] +`</span>
+    </div></div>`;
+    }
+    allAdvertisementDisplay +=`</div>`;
+    showDetails.innerHTML= allAdvertisementDisplay;
+    $(".chat-ads-display").on('click', function () {
+        id=String($(this).attr('id'));
+        displayDetails(id, adDetail, photo_link, owner_status);
     });
 }

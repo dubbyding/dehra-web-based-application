@@ -216,7 +216,10 @@ def profile_check():
             sendAdsData = requests.post('http://127.0.0.1:5000/advertisement', data = datas, files=photo)
             if(sendAdsData.status_code == 200):
                 return redirect(url_for('profile_check'))
-    return render_template('profile.html', user_ads_data=user_ads_data["advertisement_list"], photo_link=photo_link, data=data)
+    try:
+        return render_template('profile.html', user_ads_data=user_ads_data["advertisement_list"], photo_link=photo_link, data=data)
+    except:
+        return render_template('profile.html', user_ads_data=user_ads_data["advertisement_list"], photo_link=photo_link)
 
 @app.route('/chatting', methods=("POST","GET"))
 def messaging():
