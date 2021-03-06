@@ -108,7 +108,11 @@ class getGeoLocation(Resource):
     @classmethod
     def get(cls, id):
         geoLocation = AdvertisementModel.find_geo_location(id)
-        latitude, longitude = geoLocation.split(", ")
+        print(geoLocation)
+        try:
+            latitude, longitude = geoLocation.split(", ")
+        except:
+            latitude, longitude = geoLocation.split(",")
         return {
             "latitude": latitude,
             "longitude": longitude
@@ -330,7 +334,6 @@ class getMessageAll(Resource):
                     "message": message.message,
                 }
             )
-        print(message_found)
         return {"message_index": message_found}, 200
 class ChatMessageAll(Resource):
     @classmethod

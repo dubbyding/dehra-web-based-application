@@ -15,10 +15,10 @@ $(document).ready(function(){
             connected_id = null;
             connected_status = false;
         }
+        document.getElementById("details-for-texting").innerHTML="";
         for(i=0; i<checkElement.length;i++){
             document.getElementById(checkElement[i].id).style.backgroundColor="#1E1E1E";
             document.getElementById(id).style.backgroundColor="black";
-            detailsShowingOwnerRenter(id);
         };
         displayChattingArea(id);
         if(connected_status == false && connected_id == null){
@@ -76,9 +76,11 @@ function displayAllAvailableConnectedUsers(){
 }
 
 function connectIO(i){
-    socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);    // Connecting to socket io to the domain with configured protocol
+    socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);  
+    var owner_status = 0;  // Connecting to socket io to the domain with configured protocol
     if(actual_data[i]["owner_name"] == currentUser){
         username_to_send = currentUser;
+        owner_status = 1;
     }else{
         username_to_send = actual_data[i]["renter_name"];
     }
@@ -88,11 +90,13 @@ function connectIO(i){
     socket.on('connect', function (){   // When connected run this function
         socket.emit('joined_room',{ //triggers joined_room event and passes username and room
             username: username_to_send, 
+            owner_status: owner_status,
             room: roomId[i]["room_id"]
         });
     });
-    socket.on('join_room', function (datas){ // Frontend rejoin_room envoked
+    socket.on('join_room', function (all_info_data){ // Frontend rejoin_room envoked
         // previous messages restored
+        datas = all_info_data["data"];
         message = datas["Message"];
         username = datas["Username"];
         if(count==0){
@@ -104,6 +108,7 @@ function connectIO(i){
             }
         }
         updateScroll();
+        detailsShowingOwnerRenter(all_info_data);
     });
     document.getElementById("message_input_form").onsubmit = function (e) {
         e.preventDefault();
@@ -144,53 +149,104 @@ function updateScroll(){
     var element = document.getElementById("messages");
     element.scrollTop = element.scrollHeight;
 }
-function detailsShowingOwnerRenter(i){
-    var owner_status = 0;
-    if(actual_data[i]["owner_name"] == currentUser){
-        username_to_send = actual_data[i]["owner_name"];
-        owner_status = 1;
-    }else{
-        username_to_send = actual_data[i]["renter_name"];
+function detailsShowingOwnerRenter(all_info_data){
+    var owner_status = all_info_data["data"]["owner_status"]
+    if(owner_status == 0){
+        var details = all_info_data;
+        displayAllAdvertisementByOwner(details["advertisement_list"], details["photo_link"]);
     }
+    else{
+        displaySendingData(all_info_data);
+    }
+}
+function displaySendingData(all_info_data){
     var showDetails = document.getElementById('details-for-texting');
     showDetails.innerHTML="";
     showDetails.classList.remove("justify-content-center");
     const newNode = document.createElement('div');
     newNode.classList.add("row");
-    if(owner_status == 0){
-        newNode.innerHTML = `<div class="col align-items-center">
-        <p>
-        <b>Location</b>: `+details['Location']+`
-        </p>
-        <p>
-        <b>Price</b>: `+details['Price']+`
-        </p>
-        <p>
-        <b>Room Count</b>: `+details['Room Count']+`
-        </p>
-        <p>
-        <b>Water Source</b>: `+details['Water Source']+`
-        </p>
-        <p>
-        <b>Bathroom</b>: `+details['Bathroom']+`
-        </p>
-        <p>
-        <b>Terrace Access</b>: `+details['Terrace Access']+`
-        </p>
-        <p>
-        <b>Details</b>: `+details['Details']+`
-        </p>
-        <p>
-        <b>Owner</b>: `+details['Owner']+`
-        </p>
-        </div>`;
-    }
-    else{
-        newNode.innerHTML=`<div class="col">
+    newNode.innerHTML=`<div class="col">
         <button type="button" class="btn btn-primary chatDetailsSendButton" id="sendGeoLocation">Send Map Location</button>
         <button type="button" class="btn btn-primary chatDetailsSendButton" id="sendContact">Send Contact Info</button>
         </div>`;
-    }
     showDetails.appendChild(newNode);
+    console.log(all_info_data["geoLocation"]);
+    $(".chatDetailsSendButton").on('click', function () {
+        id=String($(this).attr('id'));
+        if(id=="sendGeoLocation"){
+            sending_data = `<a href="https://www.google.com/maps/search/?api=1&query=`+all_info_data["geoLocation"]["latitude"]+`,`+all_info_data["geoLocation"]["longitude"]+`>`
+            console.log(sending_data);
+            //document.getElementById("message_input").innerHTML=all_info_data["geoLocation"];
+            //document.getElementById("message-send").submit();
+        }
+        if(id == "sendContact"){
+            //document.getElementById("message_input").innerHTML=all_info_data["geoLocation"];
+            //document.getElementById("message-send").submit();
+        }
+    });
 }
+function displayDetails(i, adDetail, photo_link){
+    details = adDetail[i];
+    console.log(details);
+    var showDetails = document.getElementById('details-for-texting');
+    showDetails.innerHTML="";
+    showDetails.classList.remove("justify-content-center");
+    const newNode = document.createElement('div');
+    newNode.classList.add("row");
+    newNode.innerHTML = `<div class="col align-items-center">
+        <p id="Going-Back" style="cursor: pointer;">
+        <button type="button" class="btn btn-light"><i class="fas fa-chevron-left" style="color: black;"></i> Back
+        </button>
+        </p>
+        <p>
+        <img src="`+photo_link[i]+`" width=100px height=100px style="margin-left:5px; border-radius:10px;">
+        </p>
+        <p>
+        <b>Location</b>: `+details['property_address']+`
+        </p>
+        <p>
+        <b>Price</b>: `+details['price']+`
+        </p>
+        <p>
+        <b>Room Count</b>: `+details['room_count']+`
+        </p>
+        <p>
+        <b>Water Source</b>: `+details['water_source']+`
+        </p>
+        <p>
+        <b>Bathroom</b>: `+details['bathroom']+`
+        </p>
+        <p>
+        <b>Terrace Access</b>: `+details['terrace_access']+`
+        </p>
+        <p>
+        <b>Details</b>: `+details['description']+`
+        </p>
+        <p>
+        <b>Owner</b>: `+details["username"]+`
+        </p>
+        </div>`;
+    showDetails.appendChild(newNode);
+    $("#Going-Back").on("click",function(){
+        displayAllAdvertisementByOwner(adDetail, photo_link);
+    });
+}
+function displayAllAdvertisementByOwner(adDetail, photo_link){
+    var showDetails = document.getElementById('details-for-texting');
 
+    allAdvertisementDisplay = `<div class="container">`;
+    for(var i = 0; i< adDetail.length; i++){
+        allAdvertisementDisplay += `<div class="row contacted-people-show chat-ads-display" id = "`+i+`">`;
+        allAdvertisementDisplay += `<div class="col-6 d-flex display-contacted-people-onclick align-items-center" id="displayingAdvertisement`+ adDetail[i]["advertisement_id"]+`">
+        <img src="`+photo_link[i]+`" width=100px height=100px style="margin-left:5px; border-radius:10px;">
+        <span id="location-name">Type:- `+adDetail[i]["property_type"]+`<br> Location:- `+ adDetail[i]["property_address"].split(',')[0] +`</span>
+    </div></div>`;
+    }
+    allAdvertisementDisplay +=`</div>`;
+    showDetails.innerHTML= allAdvertisementDisplay;
+    $(".chat-ads-display").on('click', function () {
+        id=String($(this).attr('id'));
+        
+        displayDetails(id, adDetail, photo_link);
+    });
+}

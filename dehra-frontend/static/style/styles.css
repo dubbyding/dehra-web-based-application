@@ -297,6 +297,8 @@ nav{
     background-color: #C4C4C4;
     color: black;
     padding-top: 20px;
+    height: 100%;
+    overflow-y: scroll;
 }
 .chatDetailsSendButton{
     margin-top: 20px;

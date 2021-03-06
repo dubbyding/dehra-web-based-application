@@ -8,8 +8,6 @@ socketio = SocketIO(app)
 
 @app.route('/', methods=('GET','POST'))
 def index():
-    trying = requests.get("http://127.0.0.1:5000/advertisement/1")
-    print(trying.status_code)
     latest_uploaded = requests.get("http://127.0.0.1:5000/advertisement/data/12")
     if latest_uploaded.status_code == 200:
         value = latest_uploaded.json()['advertisement_list']
@@ -238,7 +236,6 @@ def messaging():
             "owner_id": ownerdata["userid"],
             "renter_id": renterdata["userid"]
         }
-        print(chatting_requesting_json)
         chatting_requesting_json = json.dumps(chatting_requesting_json)
         headers = {"Content-Type": "application/json"}
         chatting_room_id = requests.post("http://127.0.0.1:5000/chat_id", data=chatting_requesting_json, headers=headers)
@@ -248,7 +245,6 @@ def messaging():
             new = True
     userdata = requests.get('http://127.0.0.1:5000/user-data/' + session['username']).json()
     all_room_id = requests.get('http://127.0.0.1:5000/user-id/' + str(userdata["userid"]))
-    print(all_room_id.status_code)
     if all_room_id.status_code == 200:
         get_room_id = all_room_id.json()["Message"]
         data=[]
@@ -282,6 +278,8 @@ def messaging():
 @socketio.on('joined_room')
 def handle_join_room_event(data):
     address = "http://127.0.0.1:5000/getMessage/"+data["room"]
+    current_user_id = requests.get('http://127.0.0.1:5000/user-data/' + session['username']).json()["userid"]
+    
     value = requests.get(address)
     if value.status_code == 200:
         item = value.json()["message_index"]
@@ -291,7 +289,7 @@ def handle_join_room_event(data):
             user_id, message = [value for key, value in i.items()]
             user_id_list.append(user_id)
             message_list.append([user_id,message])
-        print(message_list)
+                
         for_usernames = list(set(user_id_list))
         usernames=[]
         username_dicts={}
@@ -301,15 +299,38 @@ def handle_join_room_event(data):
             usernames.append(user["username"])
         for i, names in enumerate(usernames):
             username_dicts[for_usernames[i]] = names
-        print(username_dicts)
         datas = {
             "Username": username_dicts,
-            "Message": message_list
+            "Message": message_list,
+            "owner_status": data["owner_status"]
         }
         join_room(data['room'])
+        room_user = requests.get("http://127.0.0.1:5000/user-id-from/"+str(data["room"])).json()
+        owner_id = room_user["owner"]
+        renter_id = room_user["renter"]
+        if data["owner_status"] == 0:
+            owner_advertisement_get = requests.get("http://127.0.0.1:5000/advertisement/user/"+str(owner_id)).json()["advertisement_list"]
+            # print(owner_advertisement_get)
+            photo_link_get = [requests.get("http://127.0.0.1:5000/file/"+i["photo"]).json() for i in owner_advertisement_get]
+            # print(photo_link_get)
+            all_info_data = {
+                "data": datas,
+                "advertisement_list": owner_advertisement_get,
+                "photo_link":photo_link_get
+            }
 
+        else:
+            owner_advertisement_get = requests.get("http://127.0.0.1:5000/advertisement/user/"+str(owner_id)).json()["advertisement_list"]
+            advertisment_geolocation_to_send = [requests.get("http://127.0.0.1:5000/getGeoLocation/"+str(i["advertisement_id"])).json() for i in owner_advertisement_get]
+            owner_contact_info = [requests.get("http://127.0.0.1:5000/user-contact-info/"+username_dicts[i]).json() for i in for_usernames if i == current_user_id][0]
+            all_info_data = {
+                "data": datas,
+                "advertisement_list": owner_advertisement_get,
+                "geoLocation": advertisment_geolocation_to_send,
+                "contact_info": owner_contact_info
+            }
         if value is not None:
-            socketio.emit('join_room', datas, room=data["room"])
+            socketio.emit('join_room', all_info_data ,room=data["room"])
         
 @socketio.on('send_message')
 def handle_send_messsage_event(data):
