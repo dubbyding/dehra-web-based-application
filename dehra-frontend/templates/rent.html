@@ -99,17 +99,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
+                    <form class="modal-footer" method="POST">
+                        <input type="hidden" name="owner" id="owner"> 
                         {% if not session['username'] and not session['password'] %}
                         <a href="{{ url_for('login') }}">
                         {% else %}
-                        <a href="{{ url_for('messaging') }}"></a>
+                        <a href="{{ url_for('messaging') }}">
                         {% endif %}
-                        <button type="button" class="btn btn-primary mr-auto">Chat Now</button></a>
+                        <button type="submit" class="btn btn-primary mr-auto">Chat Now</button></a>
                         <div class="owner-show">
                             <b>Owner:</b> <span id="property-owner">Raj Maharjan</span>
                         </div>
-                    </div>
+                    </form>
                 </div>
             
             </div>

@@ -185,17 +185,19 @@
                 contacted=[];
             }
             var advertisement = "{{ user_ads_data|safe }}";
-            advertisement_data = advertisement.replaceAll(/\[|\]/g,"").replaceAll(/}, {/g, "} , {").split(' , ');
-            actual_advertisement = [];
-            for(var i = 0; i<advertisement_data.length; i++){
-                each_detail = advertisement_data[i].replaceAll(/}|{/g,"").split(", ");
-                single_ads = [];
-                for(var j = 0; j<each_detail.length;j++){
-                    single_values = each_detail[j].replaceAll(/'/g,"").split(": ");
-                    single_ads[single_values[0]] = single_values[1];
+            if(advertisement!="False"){
+                advertisement_data = advertisement.replaceAll(/\[|\]/g,"").replaceAll(/}, {/g, "} , {").split(' , ');
+                actual_advertisement = [];
+                for(var i = 0; i<advertisement_data.length; i++){
+                    each_detail = advertisement_data[i].replaceAll(/}|{/g,"").split(", ");
+                    single_ads = [];
+                    for(var j = 0; j<each_detail.length;j++){
+                        single_values = each_detail[j].replaceAll(/'/g,"").split(": ");
+                        single_ads[single_values[0]] = single_values[1];
 
+                    }
+                    actual_advertisement[i] = single_ads;
                 }
-                actual_advertisement[i] = single_ads;
             }
             var data = `{{ data|safe }}`;      
             if(data !== ""){

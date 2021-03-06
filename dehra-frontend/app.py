@@ -101,6 +101,12 @@ def signup():
 @app.route('/rent', methods=("POST", "GET"))
 def rent():
     try:
+        owner = request.form["owner"]
+        session["owner"] = owner
+        return redirect(url_for("messaging"))
+    except:
+        pass
+    try:
         location = session["location"]
         session.pop('location', None)
         location_search_address = "http//127.0.0.1:5000/search/" + location
@@ -136,6 +142,7 @@ def logout():
 @app.route('/profile', methods=("POST","GET"))
 def profile_check():
     userdata = requests.get('http://127.0.0.1:5000/user-data/' + session['username']).json()
+    # print(str(userdata['userid']))
     ads_location = os.path.join('http://127.0.0.1:5000/advertisement/user/', str(userdata['userid']))
     userAds = requests.get(ads_location)
     user_ads_data = userAds.json()
@@ -144,6 +151,12 @@ def profile_check():
         photo_location = os.path.join('http://127.0.0.1:5000/file/', values["photo"])
         photo_get = requests.get(photo_location).json()
         photo_link.append(photo_get)
+    print(user_ads_data["advertisement_list"])
+    if not user_ads_data["advertisement_list"]:
+        user_ads_data["advertisement_list"] = False
+    # print(user_ads_data)
+
+    # For User Data
     userdata = requests.get('http://127.0.0.1:5000/user-data/' + session['username']).json()
     all_room_id = requests.get('http://127.0.0.1:5000/user-id/' + str(userdata["userid"]))
     if all_room_id.status_code == 200:

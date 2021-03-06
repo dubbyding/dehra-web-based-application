@@ -27,6 +27,8 @@ $(document).ready(function(){
             document.getElementById("bathroom").innerHTML = actual_advertisement[list_index]["bathroom"];
             document.getElementById("details").innerHTML = actual_advertisement[list_index]["description"];
             document.getElementById("property-owner").innerHTML = actual_advertisement[list_index]["username"];
+            document.getElementById("owner").value = actual_advertisement[list_index]["username"];
+
         });
 }
 });

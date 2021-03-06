@@ -21,15 +21,14 @@ $(".for-profile-details").on('click', function(){
     }
     if(id == 'add-advertisement'){
         var advertisement_counter = 0;
-        var capable = Math.ceil(actual_advertisement.length/4);
-        console.log(actual_advertisement[0][""]);
-        console.log(typeof(actual_advertisement[0][""]) != "undefined");
-        if(typeof(actual_advertisement[0][""]) != "undefined")
-
+        if(advertisement!="False"){
+            var capable = Math.ceil(actual_advertisement.length/4);
             advertisement_counter = addadvertisementOfPeople(advertisement_counter, capable, counterNeed=1);
         }else{
             document.getElementById("adding-advertisement").innerHTML="You have added no Advertisement!";
         }
+
+    }
 });
 function requestLocationByGeo(Latitude=27.6791296, Longitude=85.32459519999999){
     var xhr = new XMLHttpRequest();
