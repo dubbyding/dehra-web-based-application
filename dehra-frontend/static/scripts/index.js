@@ -32,12 +32,20 @@ $(document).ready(function(){
 });
 function displayAdsLatest(advertisement_putting, counter, capable, counterNeed){
     var addAds = '';
+    // console.log(counterNeed);
     if(counterNeed == 1 && counter<capable){
         counter++;
+        if(counter>3){
+            counter = 1;
+        }
     }
-    if(counterNeed == -1 && counter > 1){
+    if(counterNeed == -1){
         counter--;
+        if(counter==0){
+            counter=3;
+        }
     }
+    // console.log(counter);
     if(advertisement_putting.length<=4){
         var display = advertisement_putting.length-(4*(counter-1));
     }else{
@@ -47,9 +55,10 @@ function displayAdsLatest(advertisement_putting, counter, capable, counterNeed){
         display = advertisement_putting.length;
     }
     addAds = addAds + `<div class = "col aligning-center justify-content-center">
-        <button type="button" class="btn btn-primary btn-sm" onclick="displayAdsLatest(`+advertisement_putting+counter+`,`+ capable +`,-1)"><i class="fas fa-chevron-left"></i></button>
+        <button type="button" class="btn btn-primary btn-sm adsButton" id="latestAdLeft"><i class="fas fa-chevron-left"></i></button>
         </div>`;
     for(var i = 4*(counter-1); i< display; i++){
+        // console.log(advertisement_putting[i]["advertisement_id"]);
         addAds = addAds + `<div class = "col-2 advertisement-image-putting" id="`+advertisement_putting[i]["advertisement_id"]+`-ad-new-img" data-toggle="modal" data-target="#myModal">
                 <p class="details text-wrap justify-content-center" id="`+advertisement_putting[i]["advertisement_id"]+`-ad-new-details">
                     Location:- `+ advertisement_putting[i]["property_address"].split(",")[0] +`<br>
@@ -58,23 +67,42 @@ function displayAdsLatest(advertisement_putting, counter, capable, counterNeed){
             </div>`
     }
     addAds = addAds + `<div class = "col aligning-center justify-content-center">
-        <button type="button" class="btn btn-primary btn-sm" onclick=" displayAdsLatest(`+advertisement_putting+counter+`,`+ capable +`,1)"><i class="fas fa-chevron-right"></i></button>
+        <button type="button" class="btn btn-primary btn-sm adsButton" id="latestAdRight"><i class="fas fa-chevron-right"></i></button>
     </div>`;
     document.getElementById("new-cities-loading").innerHTML = addAds;
+    counting = 0;
     for(var i = 4*(counter-1); i< display; i++){
-        images_loading_class = document.getElementsByClassName("advertisement-image-putting")[i+4].id;
+        // console.log(document.getElementsByClassName("advertisement-image-putting"));
+        // console.log(images_link_list);
+        images_loading_class = document.getElementsByClassName("advertisement-image-putting")[(counting++)+4].id;
         document.getElementById(images_loading_class).style.backgroundImage="url('"+images_link_list[i]+"')";
     }
+    $(".adsButton").on("click", function(){
+        var id=String($(this).attr('id'));
+        if(id == "latestAdRight")
+            counter = displayAdsLatest(advertisement_putting,counter,capable,1);
+        else if(id == "latestAdLeft"){
+            counter = displayAdsLatest(advertisement_putting,counter,capable ,-1);
+        }
+    });
     return counter;
 }
 function displayAds(new_actual_advertisement, counter, capable, counterNeed){
-    var addAds = '';
+    //console.log(counterNeed);
+    document.getElementById("major-cities-loading").innerHTML = "";
     if(counterNeed == 1 && counter<capable){
         counter++;
+        if(counter>3){
+            counter = 1;
+        }
     }
     if(counterNeed == -1 && counter > 1){
         counter--;
+        if(counter==0){
+            counter=3;
+        }
     }
+    document.getElementById("major-cities-loading").innerHTML = "";
     if(actual_advertisement.length<=4){
         var display = new_actual_advertisement.length-(4*(counter-1));
     }else{
@@ -88,8 +116,8 @@ function displayAds(new_actual_advertisement, counter, capable, counterNeed){
         counter_array[i] = initial_index;
         initial_index++;
     });
-    addAds = addAds + `<div class = "col aligning-center justify-content-center">
-    <button type="button" class="btn btn-primary btn-sm" onclick="displayAds(`+new_actual_advertisement+counter+`,`+ capable +`,-1)"><i class="fas fa-chevron-left"></i></button>
+    addAds = `<div class = "col aligning-center justify-content-center">
+    <button type="button" class="btn btn-primary btn-sm adsButtons" id="Adsleft"><i class="fas fa-chevron-left"></i></button>
     </div>`;
     shuffle_index = shuffle(counter_array);
     for(var i = 4*(counter-1); i< display; i++){
@@ -102,16 +130,30 @@ function displayAds(new_actual_advertisement, counter, capable, counterNeed){
             </div>`
     }
     addAds = addAds + `<div class = "col aligning-center justify-content-center">
-        <i class="fas fa-chevron-right"></i>
+    <button type="button" class="btn btn-primary btn-sm adsButtons" id="Adsright"><i class="fas fa-chevron-right"></i></button>
     </div>`;
+    // console.log(addAds);
     document.getElementById("major-cities-loading").innerHTML = addAds;
+    // console.log(document.getElementById("major-cities-loading").innerHTML);
+    var counting = 0;
     for(var i = 4*(counter-1); i< display; i++){
         index = shuffle_index[i];
-        images_loading_class = document.getElementsByClassName("advertisement-image-putting")[i].id;
+        images_loading_class = document.getElementsByClassName("advertisement-image-putting")[counting++].id;
+        //console.log(document.getElementsByClassName("advertisement-image-putting")[i]);
         document.getElementById(images_loading_class).style.backgroundImage="url('"+images_link_list[index]+"')";
     }
+    $(".adsButtons").on("click", function(){
+        var id=String($(this).attr('id'));
+        if(id == "Adsleft"){
+            console.log("left");
+            counter = displayAds(new_actual_advertisement,counter,capable ,-1);
+        }else if(id == "Adsright"){
+            console.log("right");
+            counter = displayAds(new_actual_advertisement,counter,capable,1);
+        }
+    });
+
     return counter;
-    
 }
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
