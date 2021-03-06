@@ -102,13 +102,13 @@ function connectIO(i){
         if(count==0){
             for (var i = message.length-1; i>=0 ; i--){
                 count++;
-                const newNode = document.createElement('div');
-                newNode.innerHTML = `<b>${username[message[i][0]]}: &nbsp;</b> ${message[i][1]}`;
-                document.getElementById("messages").appendChild(newNode);
+                addMessages(username[message[i][0]], message[i][1]);
             }
         }
-        updateScroll();
-        detailsShowingOwnerRenter(all_info_data);
+        if(currentUser === datas["current_username"]){
+            updateScroll();
+            detailsShowingOwnerRenter(all_info_data);
+        }
     });
     document.getElementById("message_input_form").onsubmit = function (e) {
         e.preventDefault();
@@ -135,18 +135,61 @@ function connectIO(i){
         if(!message_side_display_element){
             console.log("No exists");
         }
-        document.getElementById("message-side-display-"+i).innerHTML = data.message.substring(0,15)+"...";
+        if(data.message.length>15){
+            document.getElementById("message-side-display-"+i).innerHTML = data.message.substring(0,15)+"...";
+        }else{
+            document.getElementById("message-side-display-"+i).innerHTML = data.message;
+        }
         const newNode = document.createElement('div');
         newNode.innerHTML = `<b>${data.username}: &nbsp;</b> ${data.message}`;
         document.getElementById("messages").appendChild(newNode);
-        updateScroll();
+        
+        if(currentUser === datas["current_username"])
+            updateScroll();
 
     });
+}
+function parseDataProperly(data){
+    var data_data = data.replaceAll(/\[|\]/g,"").replaceAll(/}, {/g, "} , {").split(' , ');
+        var seperated_message = [];
+        for(var i = 0; i<data_data.length; i++){
+            each_detail = data_data[i].replaceAll(/}|{/g,"").split(", ");
+            var single_message = [];
+            for(var j = 0; j<each_detail.length;j++){
+                single_values = each_detail[j].replaceAll(/'/g,"").split(": ");
+                single_message[single_values[0].replaceAll(/"/g,"")] = single_values[1].replaceAll(/"/g,"");
+            }
+            seperated_message.push(single_message);
+        }
+        return seperated_message;
+}
+function addMessages(username, message){
+    if(message.includes(`{"email": `) || message.includes(`"phone": `)){
+        var seperated_message = parseDataProperly(message);
+        const newNode = document.createElement('div');
+        newNode.innerHTML = `<b>${username}: &nbsp;</b><mark>Email: ${seperated_message[0]["email"]}</mark>
+        <br><mark>Phone Number: ${seperated_message[0]["phone"]}</mark>`;
+        document.getElementById("messages").appendChild(newNode);
+    }else if(message.includes(`{"latitude": `) || message.includes(`, "longitude": `)){
+        var seperated_message = parseDataProperly(message);
+        const newNode = document.createElement('div');
+        newNode.setAttribute("id", "map");
+        newNode.innerHTML = `<b>${username}:`;
+        document.getElementById("messages").appendChild(newNode);
+        addMap(seperated_message[0]["longitude"], seperated_message[0]["latitude"])
+    }
+    else{
+        const newNode = document.createElement('div');
+        newNode.innerHTML = `<b>${username}: &nbsp;</b> ${message}`;
+        document.getElementById("messages").appendChild(newNode);
+    }
+
 }
 
 function updateScroll(){
     // While putting scroll bar on webpages it focuses on the object on the bottom of the scrollbar i.e. new messages
-    var element = document.getElementById("messages");
+    var element = document.getElementById("message");
+    console.log(element);
     element.scrollTop = element.scrollHeight;
 }
 function detailsShowingOwnerRenter(all_info_data){
@@ -170,19 +213,42 @@ function displaySendingData(all_info_data){
         <button type="button" class="btn btn-primary chatDetailsSendButton" id="sendContact">Send Contact Info</button>
         </div>`;
     showDetails.appendChild(newNode);
-    console.log(all_info_data["geoLocation"]);
     $(".chatDetailsSendButton").on('click', function () {
         id=String($(this).attr('id'));
         if(id=="sendGeoLocation"){
-            sending_data = `<a href="https://www.google.com/maps/search/?api=1&query=`+all_info_data["geoLocation"]["latitude"]+`,`+all_info_data["geoLocation"]["longitude"]+`>`
-            console.log(sending_data);
-            //document.getElementById("message_input").innerHTML=all_info_data["geoLocation"];
-            //document.getElementById("message-send").submit();
+            displayAllAdvertisementToSendDetails(all_info_data);
         }
         if(id == "sendContact"){
-            //document.getElementById("message_input").innerHTML=all_info_data["geoLocation"];
-            //document.getElementById("message-send").submit();
+            document.getElementById("message_input").value=`{"email": `+ all_info_data["contact_info"]["email"]+`, "phone": `+all_info_data["contact_info"]["phone"]+`}`;;
+            document.getElementById("message-send").click();
         }
+    });
+}
+function displayAllAdvertisementToSendDetails(all_info_data){
+    var showDetails = document.getElementById('details-for-texting');
+    var adDetail = all_info_data["advertisement_list"];
+    var photo_link = all_info_data["photo_link"];
+    var allAdvertisementDisplay = `<div class="container">
+    <p id="Going-Back-Owner" style="cursor: pointer;">
+    <button type="button" class="btn btn-light"><i class="fas fa-chevron-left" style="color: black;"></i> Back
+    </button>
+    </p>`;
+    for(var i = 0; i < adDetail.length; i++){
+        allAdvertisementDisplay += `<div class="row contacted-people-show chat-ads-display" id = "`+i+`">`;
+        allAdvertisementDisplay += `<div class="col-6 d-flex display-contacted-people-onclick align-items-center" id="displayingAdvertisement`+ adDetail[i]["advertisement_id"]+`">
+        <img src="`+photo_link[i]+`" width=100px height=100px style="margin-left:5px; border-radius:10px;">
+        <span id="location-name">Type:- `+adDetail[i]["property_type"]+`<br> Location:- `+ adDetail[i]["property_address"].split(',')[0] +`</span>
+    </div></div>`;
+    }
+    allAdvertisementDisplay +=`</div>`;
+    showDetails.innerHTML= allAdvertisementDisplay;
+    $(".chat-ads-display").on('click', function () {
+        var id=String($(this).attr('id'));
+        document.getElementById("message_input").value=`{"latitude": `+ all_info_data["geoLocation"][id]["latitude"]+`, "longitude": `+all_info_data["geoLocation"][id]["longitude"]+`}`;
+        document.getElementById("message-send").click();
+    });
+    $("#Going-Back-Owner").on("click",function(){
+        displaySendingData(all_info_data);
     });
 }
 function displayDetails(i, adDetail, photo_link, owner_status){
@@ -250,21 +316,4 @@ function displayAllAdvertisementByOwner(owner_status, adDetail, photo_link){
         }
     });
 }
-function displayAllAdvertisementToSendDetails(all_info_data, adDetail, photo_link){
-    var showDetails = document.getElementById('details-for-texting');
 
-    allAdvertisementDisplay = `<div class="container">`;
-    for(var i = 0; i< adDetail.length; i++){
-        allAdvertisementDisplay += `<div class="row contacted-people-show chat-ads-display" id = "`+i+`">`;
-        allAdvertisementDisplay += `<div class="col-6 d-flex display-contacted-people-onclick align-items-center" id="displayingAdvertisement`+ adDetail[i]["advertisement_id"]+`">
-        <img src="`+photo_link[i]+`" width=100px height=100px style="margin-left:5px; border-radius:10px;">
-        <span id="location-name">Type:- `+adDetail[i]["property_type"]+`<br> Location:- `+ adDetail[i]["property_address"].split(',')[0] +`</span>
-    </div></div>`;
-    }
-    allAdvertisementDisplay +=`</div>`;
-    showDetails.innerHTML= allAdvertisementDisplay;
-    $(".chat-ads-display").on('click', function () {
-        id=String($(this).attr('id'));
-        displayDetails(id, adDetail, photo_link, owner_status);
-    });
-}

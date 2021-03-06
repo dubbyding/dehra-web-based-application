@@ -151,7 +151,7 @@ def profile_check():
         photo_location = os.path.join('http://127.0.0.1:5000/file/', values["photo"])
         photo_get = requests.get(photo_location).json()
         photo_link.append(photo_get)
-    print(user_ads_data["advertisement_list"])
+    # print(user_ads_data["advertisement_list"])
     if not user_ads_data["advertisement_list"]:
         user_ads_data["advertisement_list"] = False
     # print(user_ads_data)
@@ -316,6 +316,7 @@ def handle_join_room_event(data):
         for i, names in enumerate(usernames):
             username_dicts[for_usernames[i]] = names
         datas = {
+            "current_username": session['username'],
             "Username": username_dicts,
             "Message": message_list,
             "owner_status": data["owner_status"]
@@ -339,10 +340,12 @@ def handle_join_room_event(data):
             owner_advertisement_get = requests.get("http://127.0.0.1:5000/advertisement/user/"+str(owner_id)).json()["advertisement_list"]
             advertisment_geolocation_to_send = [requests.get("http://127.0.0.1:5000/getGeoLocation/"+str(i["advertisement_id"])).json() for i in owner_advertisement_get]
             owner_contact_info = [requests.get("http://127.0.0.1:5000/user-contact-info/"+username_dicts[i]).json() for i in for_usernames if i == current_user_id][0]
+            photo_link_get = [requests.get("http://127.0.0.1:5000/file/"+i["photo"]).json() for i in owner_advertisement_get]
             all_info_data = {
                 "data": datas,
                 "advertisement_list": owner_advertisement_get,
                 "geoLocation": advertisment_geolocation_to_send,
+                "photo_link":photo_link_get,
                 "contact_info": owner_contact_info
             }
         if value is not None:

@@ -413,3 +413,24 @@ nav{
 .input-group-text i{
     width:25px;
 }
+/*Example 1, all the CSS is defined here and not in JS*/            
+#markerWithExternalCss {
+    background-image: url('https://www.dropbox.com/s/ggbg411ek22e5d2/marker.png?raw=1');
+    background-size: cover;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+
+/*Example 2, most of the CSS is set by JS*/
+.marker {
+    display: block;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+#map { 
+    position:relative; 
+    width:100%; 
+    height: 50vh;
+}

@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
+        
+        <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.js'></script>
+        <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.0/mapbox-gl.css' rel='stylesheet' />
         <script src="{{ url_for('static', filename='./scripts/message.js') }}" type="text/javascript"></script>
 
         <!-- For Chatting area-->
@@ -57,7 +60,7 @@
                             <span id="username-chatting"></span>
                         </div>
                     </div>
-                    <div class="row chat-area align-items-end">
+                    <div class="row chat-area align-items-end" id="message">
                             <div class="col" id="messages">
                                 
                         </div>
@@ -66,7 +69,7 @@
                         <div class="col align-items-center input-group">
                             <input type="text" class="form-control" id="message_input" placeholder="Type A Message" autocomplete="off" aria-label="Type A Message" aria-describedby="message-send">
                             <div class="input-group-append ">
-                                <button class="btn btn-outline-secondary" type="button" id="message-send"><i class="fas fa-paper-plane message-send-icon"></i></button>
+                                <button class="btn btn-outline-secondary" type="submit" id="message-send"><i class="fas fa-paper-plane message-send-icon"></i></button>
                             </div>
                         </div>
                     </form>
@@ -109,6 +112,43 @@
                     }
                     roomId.push(single_id_collection);
                 }
+            }
+            function addMap(longitude, latitude){
+                //Add your LocationIQ Maps Access Token here (not the API token!)
+                
+                locationiqKey = 'pk.aefdd1e94586b32241589dadb011b72e';
+                //Define the map and configure the map's theme
+                var map = new mapboxgl.Map({
+                    container: 'map',
+                    attributionControl: false, //need this to show a compact attribution icon (i) instead of the whole text
+                    style: 'https://tiles.locationiq.com/v3/streets/vector.json?key='+locationiqKey,
+                    zoom: 15,
+                    center: [parseFloat(longitude), parseFloat(latitude)]
+                });
+                            
+                //Marker can be style either while adding the marker using JS or separately using CSS
+
+                //Here's an example where we use external CSS to specify background image, size, etc
+                //https://www.mapbox.com/mapbox-gl-js/api#marker
+                // first create DOM element for the marker
+                var el = document.createElement('div');
+                el.id = 'markerWithExternalCss';
+                // finally, create the marker
+                var markerWithExternalCss = new mapboxgl.Marker(el)
+                    .setLngLat([longitude, latitude])
+                    .addTo(map);
+
+                //Here's an example where use set variables like backgroundImage in JS itself (the common params are specified in CSS '.marker'
+                var el2 = document.createElement('div');
+                el2.className = 'marker';
+                el2.style.width = '50px';
+                el2.style.height = '50px';
+                
+                // add marker to map
+                new mapboxgl.Marker(el2)
+                    .setLngLat([parseFloat(longitude), parseFloat(latitude)])
+                    .addTo(map);
+
             }
         </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
